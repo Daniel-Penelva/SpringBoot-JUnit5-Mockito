@@ -1,0 +1,46 @@
+Metodologia TDD
+
+O TDD (Test-Driven Development), ou Desenvolvimento Orientado a Testes, é uma metodologia de desenvolvimento de software que enfatiza a criação 
+de testes automatizados antes da implementação do código de produção. O ciclo de desenvolvimento do TDD é geralmente dividido em três etapas: 
+Red-Green-Refactor (Vermelho-Verde-Refatoração).
+
+Aqui está uma visão geral de como o TDD funciona:
+
+1. **Red (Vermelho)**: Na primeira fase, você escreve um teste automatizado que descreve o comportamento desejado de uma parte do sistema que 
+   ainda não foi implementada. Esse teste deve falhar inicialmente, indicando que o comportamento ainda não está presente.
+
+2. **Green (Verde)**: Na segunda fase, você escreve o código de produção necessário para que o teste automatizado passe com sucesso. O objetivo 
+   é fazer o teste passar de forma simples e direta, sem adicionar funcionalidades extras ou complexidade desnecessária.
+
+3. **Refactor (Refatoração)**: Na terceira fase, você refatora o código recém-implementado, se necessário, para torná-lo mais limpo, eficiente e 
+   legível. O objetivo é manter o código de alta qualidade e eliminar qualquer duplicação ou complexidade indesejada.
+
+Este ciclo de Red-Green-Refactor é repetido várias vezes ao longo do desenvolvimento do software, com cada iteração focada em uma pequena parte 
+do sistema. O TDD promove várias práticas e benefícios importantes:
+
+- **Testes Automatizados**: O TDD resulta em um conjunto robusto de testes automatizados que podem ser executados a qualquer momento para 
+  verificar se as funcionalidades existentes ainda estão funcionando conforme o esperado.
+
+- **Documentação Viva**: Os testes servem como uma forma de documentação viva do código. Eles descrevem claramente o comportamento esperado do 
+  software.
+
+- **Refatoração Segura**: A etapa de refatoração é facilitada pelo fato de que você tem um conjunto confiável de testes que podem detectar 
+  regressões introduzidas pela refatoração.
+
+- **Feedback Rápido**: Como você está escrevendo testes desde o início, você recebe feedback instantâneo sobre o sucesso ou falha do código, o 
+  que ajuda a identificar e corrigir problemas rapidamente.
+
+- **Design Orientado a Testes**: O TDD tende a promover um design de código mais modular e testável, pois você deve escrever testes para partes 
+  individuais do sistema desde o início.
+
+- **Foco na Necessidade**: O TDD incentiva você a escrever apenas o código necessário para fazer os testes passarem, o que ajuda a manter o foco 
+  nas necessidades reais do software.
+
+O TDD não é uma panaceia e pode não ser apropriado para todos os cenários de desenvolvimento. É especialmente valioso em situações onde a 
+qualidade do código é crítica, como em projetos de software com requisitos rigorosos de segurança ou onde a manutenção a longo prazo é um fator 
+importante.
+
+No entanto, o TDD também pode ser desafiador e requer prática para ser usado efetivamente. É importante encontrar um equilíbrio entre a criação 
+de testes adequados e não gastar tempo excessivo escrevendo testes para cada pequena parte do código. Em última análise, o TDD é uma ferramenta 
+poderosa que pode melhorar a qualidade e a confiabilidade do seu software, mas deve ser usado com discernimento e adaptado às necessidades do 
+projeto.
