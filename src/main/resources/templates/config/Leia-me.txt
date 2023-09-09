@@ -44,3 +44,54 @@ No entanto, o TDD também pode ser desafiador e requer prática para ser usado e
 de testes adequados e não gastar tempo excessivo escrevendo testes para cada pequena parte do código. Em última análise, o TDD é uma ferramenta 
 poderosa que pode melhorar a qualidade e a confiabilidade do seu software, mas deve ser usado com discernimento e adaptado às necessidades do 
 projeto.
+
+----------------------------------------------------------------------- // -----------------------------------------------------------------------
+
+Anotação @Builder
+
+A anotação `@Builder` é uma anotação fornecida pelo framework Lombok em Java. Ela é usada para simplificar a criação de construtores complexos, 
+especialmente quando uma classe possui muitos campos ou propriedades. O Lombok gera automaticamente um padrão de projeto chamado "Builder" para 
+a classe anotada, permitindo a criação de instâncias dessa classe de forma mais concisa e legível.
+
+Aqui está um exemplo de como usar a anotação `@Builder`:
+
+```java
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
+@Builder
+public class Person {
+    private String firstName;
+    private String lastName;
+    private int age;
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Person person = Person.builder()
+            .firstName("John")
+            .lastName("Doe")
+            .age(30)
+            .build();
+        
+        System.out.println(person.getFirstName());
+        System.out.println(person.getLastName());
+        System.out.println(person.getAge());
+    }
+}
+```
+
+Neste exemplo, a classe `Person` é anotada com `@Builder`. Isso permite que você crie uma instância da classe `Person` usando um padrão fluente, 
+onde você pode definir os valores dos campos usando métodos encadeados. No método `main`, você pode ver como é fácil criar uma instância da 
+classe `Person` e definir os valores dos campos.
+
+O Lombok gera automaticamente um construtor privado dentro da classe `Person` que aceita todos os campos como argumentos e cria uma instância da 
+classe com esses valores. A anotação `@Builder` também adiciona métodos de criação para cada campo, permitindo que você configure esses campos 
+individualmente.
+
+Em resumo, a anotação `@Builder` é útil para simplificar a criação de instâncias de classes com muitos campos, melhorando a legibilidade e a 
+concisão do código. Ela é especialmente útil em classes de modelo de dados ou classes onde a criação de objetos pode ser complexa devido a muitos 
+campos opcionais.
