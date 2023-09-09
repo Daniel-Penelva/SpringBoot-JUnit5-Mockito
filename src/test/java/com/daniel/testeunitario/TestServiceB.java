@@ -2,9 +2,9 @@ package com.daniel.testeunitario;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.mockito.Mockito;
 
 import com.daniel.testeunitario.service.ServiceA;
-import com.daniel.testeunitario.service.ServiceAImpl;
 import com.daniel.testeunitario.service.ServiceB;
 import com.daniel.testeunitario.service.ServiceBImpl;
 
@@ -24,15 +24,20 @@ public class TestServiceB {
     depende do ServiceA para gerar o teste corretamente.  */ 
 
     @Test
-    public void testMultiplicarSomar(){
-        
-        // ServiceB depende do ServiceA. Percebe-se através dessa instanciação do objeto serviceA.
-        ServiceA serviceA = new ServiceAImpl();
+    public void testMultiplicarSomarMockito(){
+        ServiceA serviceA = Mockito.mock(ServiceA.class);
+
+        Mockito.when(serviceA.soma(2, 3)).thenReturn(5);
 
         ServiceB serviceB = new ServiceBImpl();
-
         serviceB.setServiceA(serviceA);
-
         Assert.assertEquals(serviceB.calculoMultiplicar(2, 3, 2), 10);
     }
+
+    /* Ao Utilizar o Mockito eliminamos a dependência do ServiceB em relação ao ServiceA, e a principal razão pela qual o Mockito pode eliminar 
+    dependências entre métodos é a capacidade de substituir objetos reais por objetos simulados (mocks - simula uma class). Isso é conhecido como 
+    "mocking". Quando você está testando um componente específico, deseja isolar esse componente de suas dependências externas para que o teste 
+    se concentre apenas no comportamento desse componente. Exemplificando: [ServiceB] <Elimina a dependencia> [Mock ServiceA] */
+
+
 }
