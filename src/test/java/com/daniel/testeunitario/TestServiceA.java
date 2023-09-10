@@ -3,8 +3,8 @@ package com.daniel.testeunitario;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.daniel.testeunitario.service.ServiceA;
-import com.daniel.testeunitario.service.ServiceAImpl;
+import com.daniel.testeunitario.examples.ServiceA;
+import com.daniel.testeunitario.examples.ServiceAImpl;
 
 public class TestServiceA {
     

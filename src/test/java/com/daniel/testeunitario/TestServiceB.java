@@ -4,9 +4,9 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-import com.daniel.testeunitario.service.ServiceA;
-import com.daniel.testeunitario.service.ServiceB;
-import com.daniel.testeunitario.service.ServiceBImpl;
+import com.daniel.testeunitario.examples.ServiceA;
+import com.daniel.testeunitario.examples.ServiceB;
+import com.daniel.testeunitario.examples.ServiceBImpl;
 
 public class TestServiceB {
     

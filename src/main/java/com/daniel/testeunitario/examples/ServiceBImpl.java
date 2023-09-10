@@ -1,4 +1,4 @@
-package com.daniel.testeunitario.service;
+package com.daniel.testeunitario.examples;
 
 public class ServiceBImpl implements ServiceB{
 
