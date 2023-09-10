@@ -95,3 +95,97 @@ individualmente.
 Em resumo, a anotação `@Builder` é útil para simplificar a criação de instâncias de classes com muitos campos, melhorando a legibilidade e a 
 concisão do código. Ela é especialmente útil em classes de modelo de dados ou classes onde a criação de objetos pode ser complexa devido a muitos 
 campos opcionais.
+
+----------------------------------------------------------------------- // -----------------------------------------------------------------------
+
+BDD (Behavior-Driven Development)
+
+O BDD (Behavior-Driven Development), que é uma abordagem de desenvolvimento de software que se concentra em comportamento e colaboração entre 
+equipes de desenvolvimento, testes e negócios. BDD é uma extensão do TDD (Test-Driven Development) que visa tornar a compreensão do comportamento 
+do software mais clara e compartilhável por todas as partes interessadas, incluindo desenvolvedores, testadores e pessoas de negócios. Aqui estão 
+os principais conceitos do BDD:
+
+1. **Linguagem Ubíqua:** Uma parte fundamental do BDD é a criação de uma linguagem compartilhada entre desenvolvedores, testadores e pessoas de 
+   negócios. Essa linguagem deve descrever o comportamento esperado do software em termos não técnicos. Isso ajuda a garantir que todos tenham uma 
+   compreensão comum do que o software deve fazer.
+
+2. **User Stories:** O BDD frequentemente utiliza "User Stories" para descrever requisitos de software do ponto de vista do usuário final. Essas 
+   histórias descrevem como o sistema deve se comportar em termos de entradas, saídas e comportamento esperado.
+
+3. **Especificação por Exemplo:** Uma das práticas-chave do BDD é a criação de "especificações por exemplo". Essas especificações são escritas 
+   em linguagem natural e descrevem o comportamento esperado do software em cenários específicos. Esses exemplos ajudam a ilustrar como o 
+  software deve se comportar em diferentes situações.
+
+4. **Testes Automatizados:** No BDD, os testes são escritos antes do código de produção. Esses testes são baseados nas especificações por exemplo 
+   e servem como uma forma de validar se o código atende aos requisitos.
+
+5. **Ferramentas BDD:** Existem várias ferramentas e estruturas de teste projetadas especificamente para o BDD. Cucumber, Behave e SpecFlow são 
+   exemplos de ferramentas populares que permitem escrever testes em linguagem natural e automatizá-los.
+
+6. **Colaboração:** O BDD incentiva a colaboração entre as equipes de desenvolvimento, testes e negócios desde o início do projeto. Isso ajuda a 
+   evitar mal-entendidos e garante que todos tenham uma visão clara do que está sendo desenvolvido.
+
+7. **Feedback Contínuo:** Como os testes são escritos antes do código de produção, o BDD fornece feedback contínuo sobre o progresso do 
+   desenvolvimento. Isso permite que os problemas sejam identificados e resolvidos mais cedo no processo, economizando tempo e recursos.
+
+8. **Documentação Viva:** As especificações por exemplo servem como documentação viva do sistema. Elas podem ser atualizadas à medida que os 
+   requisitos evoluem, garantindo que a documentação esteja sempre alinhada com o código.
+
+Em resumo, o BDD é uma abordagem de desenvolvimento que se concentra em comportamento, colaboração e comunicação eficaz. Ele ajuda a garantir 
+que o software atenda aos requisitos do usuário final, promovendo a clareza e a compreensão comuns entre todas as partes interessadas no projeto.
+
+-------------------- // --------------------
+
+O conceito de "Given-When-Then" no contexto do BDD (Behavior-Driven Development).
+
+**BDD (Behavior-Driven Development)** é uma abordagem de desenvolvimento de software que se concentra em descrever o comportamento esperado de 
+um sistema a partir da perspectiva do usuário final. Ele promove a colaboração entre desenvolvedores, testadores e partes interessadas para criar 
+especificações de comportamento que são compreensíveis tanto para técnicos quanto para não técnicos.
+
+A estrutura "Given-When-Then" é uma parte fundamental do BDD e é usada para estruturar e escrever cenários de teste de forma clara e 
+compreensível. Ela é composta por três partes:
+
+1. **Given (Dado):**
+   - A primeira parte, "Given," descreve o contexto ou as condições iniciais do cenário de teste. Ou seja, se especifica o cenário, as 
+     pré-condições.
+   - É onde você configura o ambiente de teste, define o estado inicial e cria qualquer pré-requisito necessário para o cenário.
+   - O "Given" estabelece o cenário para o teste.
+
+2. **When (Quando):**
+   - A segunda parte, "When," descreve a ação ou o evento que você está testando. Ou seja, as condições das ações que irão ser executadas.
+   - É a etapa em que você executa a ação que deseja testar.
+   - O "When" representa o comportamento específico que está sendo verificado.
+
+3. **Then (Então):**
+   - A terceira parte, "Then," descreve o resultado ou comportamento esperado após a ação ter sido executada. Ou seja, o resultado esperado, as 
+     validações a realizar.
+   - Aqui, você verifica se o sistema se comportou conforme o esperado e se os resultados são consistentes com as expectativas do teste.
+   - O "Then" verifica se o comportamento é o correto.
+
+Exemplo completo de um cenário usando "Given-When-Then":
+
+```
+Cenário: sacar dinheiro de um caixa eletrônico
+
+   Dado (Given) que o saldo da conta é de R$ 1000
+   E o caixa eletrônico (ATM) contém R$ 500
+   Quando (When) o usuário saca R$ 200 no caixa eletrônico
+   Então (then) o caixa eletrônico deverá distribuir R$200
+   E o saldo da conta deve ser de R$ 800
+```
+
+Neste exemplo:
+- "Given" configura o estado inicial, ou seja, a conta tem um saldo de R$1000 e o ATM tem R$500.
+- "When" descreve a ação, ou seja, o usuário retira R$200 do ATM.
+- "Then" especifica o resultado esperado, que o ATM deve liberar R$200 e o saldo da conta deve ser reduzido para R$800.
+
+Outro Exemplo prático:
+
+Given: Dado que o usuário não introduziu nenhuma data no formulário.
+When: Quando faz click no botão Enviar.
+Then: Se devem mostrar as mensagens de validação apropriadas.
+
+
+A estrutura "Given-When-Then" ajuda a criar cenários de teste legíveis, compreensíveis e bem estruturados, que são valiosos para as equipes de 
+desenvolvimento e teste, bem como para as partes interessadas não técnicas, pois descreve o comportamento do sistema em termos de cenários 
+realistas.
