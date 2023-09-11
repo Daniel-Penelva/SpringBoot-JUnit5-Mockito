@@ -9,6 +9,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.never;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -176,7 +177,7 @@ public class EmpregadoServiceTest {
      * Em resumo, este teste verifica se o método `getAllEmpregados` do serviço `empregadoServiceImpl` retorna uma lista de empregados com o 
      * tamanho correto e que a lista não é nula. Isso é feito usando o Mockito para simular o comportamento do repositório ao chamar `findAll`.
     */
-    @DisplayName("Teste para criar listar empregados")
+    @DisplayName("Teste listar todos os empregados")
     @Test
     void testListarEmpregados() {
 
@@ -196,5 +197,60 @@ public class EmpregadoServiceTest {
         // then - verificar mensagem de validação
         assertNotNull(listaEmpregados);
         assertEquals(2, listaEmpregados.size());
+    }
+
+
+/**
+ * Explicando cada linha de código - testListarCollecaoVaziaEmpregados()
+ * 
+ * 1. `@DisplayName("Teste para retornar uma lista vazia")`: Esta é uma anotação do JUnit 5 que define o nome do teste que será exibido na saída 
+ *     do teste.
+ * 
+ * 2. `@Test`: Esta é uma anotação do JUnit 5 que indica que o método é um método de teste.
+ * 
+ * 3. `Empregado empregado1 = criarEmpregado();`: Aqui, cria um objeto `Empregado` chamado `empregado1` usando o método `criarEmpregado()`. Este 
+ *     será um empregado simulado que não usará neste teste.
+ * 
+ * 4. `Empregado empregado2 = Empregado.builder()...`: Aqui, cria manualmente um segundo objeto `Empregado` chamado `empregado2`. Este será 
+ *     outro empregado simulado que não usará neste teste.
+ * 
+ * 5. `given(empregadoRepository.findAll()).willReturn(Collections.emptyList());`: Aqui, usa o Mockito para configurar o comportamento do mock 
+ *    `empregadoRepository`. VAqui, diz que quando o método `findAll` for chamado, ele deve retornar uma lista vazia (representada por 
+ *    `Collections.emptyList()`). Isso simula a situação em que o repositório não possui empregados e retorna uma lista vazia quando o método 
+ *    `getAllEmpregados` é chamado.
+ * 
+ * 6. `List<Empregado> listaEmpregados = empregadoServiceImpl.getAllEmpregados();`: Aqui, chama o método `getAllEmpregados` do serviço, 
+ *     que internamente deve chamar o método `findAll` do repositório (que você configurou para retornar uma lista vazia).
+ * 
+ * 7. `assertTrue(listaEmpregados.isEmpty());`: Aqui, verifica se a lista de empregados retornada está vazia usando `assertTrue`. Isso garante 
+ *     que o serviço retorne uma lista vazia quando não há empregados no repositório.
+ * 
+ * 8. `assertEquals(0, listaEmpregados.size());`: Aqui, verifica se o tamanho da lista retornada é igual a 0. Isso é outra maneira de garantir 
+ *     que a lista está vazia.
+ * 
+ * Em resumo, este teste verifica se o método `getAllEmpregados` do serviço `empregadoServiceImpl` retorna uma lista vazia quando o repositório 
+ * não possui empregados. Isso é feito configurando o comportamento do repositório com o Mockito para retornar uma lista vazia quando o método 
+ * `findAll` é chamado.
+*/
+    @DisplayName("Teste para retornar uma lista vazia")
+    @Test
+    void testListarCollecaoVaziaEmpregados() {
+
+        // Given - gerando os dados antes do condicionamento.
+        Empregado empregado1 = criarEmpregado();
+
+        Empregado empregado2 = Empregado.builder()
+                .nome("João")
+                .sobrenome("Silva")
+                .email("joao@gmail.com").build();
+        
+        given(empregadoRepository.findAll()).willReturn(Collections.emptyList());
+
+        // when - criando a condição (o comportamento) a ser testado
+       List<Empregado> listaEmpregados = empregadoServiceImpl.getAllEmpregados();
+
+        // then - verificar mensagem de validação
+        assertTrue(listaEmpregados.isEmpty());
+        assertEquals(0, listaEmpregados.size());
     }
 }
