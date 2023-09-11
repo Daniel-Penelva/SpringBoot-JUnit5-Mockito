@@ -5,7 +5,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import com.daniel.testeunitario.model.Empregado;
-import com.fasterxml.jackson.databind.introspect.TypeResolutionContext.Empty;
 
 @DataJpaTest
 public class EmpregadoRepositoryTest {

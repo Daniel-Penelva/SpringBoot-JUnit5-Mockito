@@ -189,3 +189,49 @@ Then: Se devem mostrar as mensagens de validação apropriadas.
 A estrutura "Given-When-Then" ajuda a criar cenários de teste legíveis, compreensíveis e bem estruturados, que são valiosos para as equipes de 
 desenvolvimento e teste, bem como para as partes interessadas não técnicas, pois descreve o comportamento do sistema em termos de cenários 
 realistas.
+
+----------------------------------------------------------------------- // -----------------------------------------------------------------------
+
+Anotação `@ExtendWith(MockitoExtension.class)
+
+A anotação `@ExtendWith(MockitoExtension.class)` é usada em testes unitários do JUnit 5 (JUnit Jupiter) para estender o framework JUnit e 
+habilitar a integração com o Mockito, uma biblioteca amplamente usada para criar mocks e simular comportamentos em testes de unidades. 
+
+Quando você adiciona essa anotação a uma classe de teste, como a seguir:
+
+```java
+@ExtendWith(MockitoExtension.class)
+public class MinhaClasseDeTeste {
+    // ...
+}
+```
+
+Isso indica ao JUnit que ele deve usar a extensão `MockitoExtension` para inicializar objetos mock e injetá-los nas dependências de sua classe 
+de teste. Isso é particularmente útil quando você está escrevendo testes que envolvem a criação de mocks e a verificação de interações com esses 
+mocks.
+
+Ao usar o `MockitoExtension`, você pode usar facilmente as anotações `@Mock`, `@InjectMocks` e outras para configurar seus mocks e injetá-los 
+nas classes que você está testando. Isso ajuda a manter seus testes organizados e facilita a simulação de comportamentos específicos durante os 
+testes.
+
+Por exemplo, pode fazer algo como:
+
+```java
+@ExtendWith(MockitoExtension.class)
+public class MinhaClasseDeTeste {
+
+    @Mock
+    private MinhaClasseDependente minhaClasseDependente;
+
+    @InjectMocks
+    private MinhaClasse minhaClasse;
+
+    // ...
+}
+```
+
+Isso configura um mock da classe `MinhaClasseDependente` e injeta-o na classe `MinhaClasse` durante os testes. Dessa forma, você pode controlar 
+o comportamento do mock e verificar como a classe `MinhaClasse` interage com sua dependência durante o teste.
+
+Em resumo, `@ExtendWith(MockitoExtension.class)` é uma anotação essencial para integrar o JUnit 5 com o Mockito e facilitar a escrita de testes
+unitários envolvendo mocks.
