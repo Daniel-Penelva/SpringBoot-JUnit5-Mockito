@@ -1,5 +1,7 @@
 package com.daniel.testeunitario.service;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
@@ -141,5 +143,58 @@ public class EmpregadoServiceTest {
 
         // then - verificar mensagem de validação
         Mockito.verify(empregadoRepository, never()).save(any(Empregado.class));
+    }
+
+
+    /**
+     * Explicando cada linha de código - testListarEmpregados():
+     * 
+     * 1. `@DisplayName("Teste para criar listar empregados")`: Esta é uma anotação do JUnit 5 que define o nome do teste que será exibido na saída 
+     *     do teste.
+     * 
+     * 2. `@Test`: Esta é uma anotação do JUnit 5 que indica que o método é um método de teste.
+     * 
+     * 3. `Empregado empregado1 = criarEmpregado();`: Você cria um objeto `Empregado` chamado `empregado1` usando o método `criarEmpregado()`.
+     * 
+     * 4. `Empregado empregado2 = Empregado.builder()...`: Aqui, você cria manualmente um segundo objeto `Empregado` chamado `empregado2`. Este 
+     *     será outro empregado que você adicionará à lista simulada de empregados retornada pelo repositório.
+     * 
+     * 5. `given(empregadoRepository.findAll()).willReturn(List.of(empregado1, empregado2));`: Você usa o Mockito para configurar o 
+     *    comportamento do mock `empregadoRepository`. Você diz que quando o método `findAll` for chamado, ele deve retornar uma lista contendo 
+     *    `empregado1` e `empregado2`. Isso simula a situação em que o repositório retorna uma lista de empregados quando o método `getAllEmpregados` é chamado.
+     * 
+     * 6.  `List<Empregado> listaEmpregados = empregadoServiceImpl.getAllEmpregados();`: Aqui, você chama o método `getAllEmpregados` do serviço, 
+     *      que internamente deve chamar o método `findAll` do repositório (que você configurou para retornar os empregados `empregado1` e 
+     *      `empregado2`).
+     * 
+     * 7. `assertNotNull(listaEmpregados);`: Você verifica se a lista de empregados retornada não é nula, garantindo que o serviço não retorne 
+     *    uma lista nula.
+     * 
+     * 8. `assertEquals(2, listaEmpregados.size());`: Você verifica se o tamanho da lista retornada é igual a 2, o que verifica se o serviço 
+     *     está retornando corretamente os dois empregados simulados.
+     * 
+     * Em resumo, este teste verifica se o método `getAllEmpregados` do serviço `empregadoServiceImpl` retorna uma lista de empregados com o 
+     * tamanho correto e que a lista não é nula. Isso é feito usando o Mockito para simular o comportamento do repositório ao chamar `findAll`.
+    */
+    @DisplayName("Teste para criar listar empregados")
+    @Test
+    void testListarEmpregados() {
+
+        // Given - gerando os dados antes do condicionamento.
+        Empregado empregado1 = criarEmpregado();
+
+        Empregado empregado2 = Empregado.builder()
+                .nome("Daniel")
+                .sobrenome("Penelva")
+                .email("d4n.andrade@gmail.com").build();
+        
+        given(empregadoRepository.findAll()).willReturn(List.of(empregado1, empregado2));
+
+        // when - criando a condição (o comportamento) a ser testado
+       List<Empregado> listaEmpregados = empregadoServiceImpl.getAllEmpregados();
+
+        // then - verificar mensagem de validação
+        assertNotNull(listaEmpregados);
+        assertEquals(2, listaEmpregados.size());
     }
 }
