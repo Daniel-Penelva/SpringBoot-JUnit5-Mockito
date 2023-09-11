@@ -74,5 +74,21 @@ public class EmpregadoRepositoryTest {
         assertNotNull(listaEmpregados);
         assertEquals(2, listaEmpregados.size());
     }
+
+    @DisplayName("Teste para buscar empregado por id")
+    @Test
+    void testBuscarEmpregadoPorId(){
+
+        // Given - gerando os dados antes do condicionamento.
+        Empregado empregado1 = criarEmpregado();
+
+        empregadoRepository.save(empregado1);
+        
+         // when - criando a condição (o comportamento) a ser testado
+        Empregado buscarEmpregadoId = empregadoRepository.findById(empregado1.getId()).get();
+
+         // then - verificar mensagem de validação
+        assertNotNull(buscarEmpregadoId);
+    }
 }
 
