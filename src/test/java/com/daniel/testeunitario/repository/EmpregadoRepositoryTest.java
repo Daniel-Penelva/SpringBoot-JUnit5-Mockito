@@ -1,9 +1,11 @@
 package com.daniel.testeunitario.repository;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-import org.assertj.core.api.Assertions;
+import java.util.List;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,15 +27,22 @@ public class EmpregadoRepositoryTest {
     @Autowired
     private EmpregadoRepository empregadoRepository;
 
+    // Criar um empregado
+    private Empregado criarEmpregado(){
+       
+        return Empregado.builder()
+                .nome("Daniel")
+                .sobrenome("Penelva")
+                .email("d4n.andrade@gmail.com").build();
+    }
+
+
     @DisplayName("Teste para criar um empregado")
     @Test
     void testCriarEmpregado() {
 
         // Given - gerando os dados antes do condicionamento.
-        Empregado empregado1 = Empregado.builder()
-                .nome("Daniel")
-                .sobrenome("Penelva")
-                .email("d4n.andrade@gmail.com").build();
+        Empregado empregado1 = criarEmpregado();
 
         // when - criando a condição (o comportamento) a ser testado
         Empregado empregadoCriado = empregadoRepository.save(empregado1);
@@ -42,4 +51,28 @@ public class EmpregadoRepositoryTest {
       assertNotNull(empregadoCriado);
       assertTrue("O ID do empregado criado deve ser maior que 0", empregadoCriado.getId() > 0);
     }
+
+    @DisplayName("Teste para listar empregados")
+    @Test
+    void testListarTodosEmpregados(){
+
+        // Given - gerando os dados antes do condicionamento.
+        Empregado empregado1 = criarEmpregado();
+
+        Empregado empregado2 = Empregado.builder()
+                .nome("João")
+                .sobrenome("da Silva")
+                .email("joao@gmail.com").build();
+
+        empregadoRepository.save(empregado1);
+        empregadoRepository.save(empregado2);
+
+         // when - criando a condição (o comportamento) a ser testado
+        List<Empregado> listaEmpregados = empregadoRepository.findAll();
+
+         // then - verificar mensagem de validação
+        assertNotNull(listaEmpregados);
+        assertEquals(2, listaEmpregados.size());
+    }
 }
+
