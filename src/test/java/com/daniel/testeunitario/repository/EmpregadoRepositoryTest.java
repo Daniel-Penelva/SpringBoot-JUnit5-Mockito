@@ -5,6 +5,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import com.daniel.testeunitario.model.Empregado;
+import com.fasterxml.jackson.databind.introspect.TypeResolutionContext.Empty;
 
 @DataJpaTest
 public class EmpregadoRepositoryTest {
@@ -91,7 +93,7 @@ public class EmpregadoRepositoryTest {
         assertNotNull(buscarEmpregadoId);
     }
 
-    @DisplayName("Teste atualizar empregado por id")
+    @DisplayName("Teste para atualizar empregado por id")
     @Test
     void testAtualizarEmpregadoPorId(){
 
@@ -112,6 +114,22 @@ public class EmpregadoRepositoryTest {
         assertNotNull(buscarEmpregadoId);
         assertEquals("Testa se o email foi atualizado", "d4n.penelva@gmail.com", buscarEmpregadoId.getEmail());
         assertEquals("Testa se o nome foi atualizado", "Daniel Up", buscarEmpregadoId.getNome());
+    }
+
+    @DisplayName("Teste para deletar empregado por id")
+    @Test
+    void testDeletarEmpregadoPorId(){
+
+        // Given - gerando os dados antes do condicionamento.
+        Empregado empregado1 = criarEmpregado();
+        
+        empregadoRepository.save(empregado1);
+        
+        // when - criando a condição (o comportamento) a ser testado
+        empregadoRepository.deleteById(empregado1.getId());
+         
+         // then - verificar mensagem de validação
+         assertTrue(empregadoRepository.findById(empregado1.getId()).isEmpty());
     }
 }
 
