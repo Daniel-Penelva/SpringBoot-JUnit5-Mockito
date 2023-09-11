@@ -90,5 +90,28 @@ public class EmpregadoRepositoryTest {
          // then - verificar mensagem de validação
         assertNotNull(buscarEmpregadoId);
     }
+
+    @DisplayName("Teste atualizar empregado por id")
+    @Test
+    void testAtualizarEmpregadoPorId(){
+
+        // Given - gerando os dados antes do condicionamento.
+        Empregado empregado1 = criarEmpregado();
+
+        empregadoRepository.save(empregado1);
+        
+         // when - criando a condição (o comportamento) a ser testado
+        Empregado buscarEmpregadoId = empregadoRepository.findById(empregado1.getId()).get();
+        buscarEmpregadoId.setNome("Daniel Up");
+        buscarEmpregadoId.setEmail("d4n.penelva@gmail.com");
+        buscarEmpregadoId.setSobrenome("Andrade");
+        
+        Empregado atualizarEmpregado = empregadoRepository.save(buscarEmpregadoId);
+
+         // then - verificar mensagem de validação
+        assertNotNull(buscarEmpregadoId);
+        assertEquals("Testa se o email foi atualizado", "d4n.penelva@gmail.com", buscarEmpregadoId.getEmail());
+        assertEquals("Testa se o nome foi atualizado", "Daniel Up", buscarEmpregadoId.getNome());
+    }
 }
 
