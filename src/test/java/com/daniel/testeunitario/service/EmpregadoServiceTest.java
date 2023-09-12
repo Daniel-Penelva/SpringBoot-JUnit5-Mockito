@@ -41,6 +41,7 @@ public class EmpregadoServiceTest {
     private Empregado criarEmpregado() {
 
         return Empregado.builder()
+                .id(1L)
                 .nome("Daniel")
                 .sobrenome("Penelva")
                 .email("d4n.andrade@gmail.com").build();
@@ -252,5 +253,59 @@ public class EmpregadoServiceTest {
         // then - verificar mensagem de validação
         assertTrue(listaEmpregados.isEmpty());
         assertEquals(0, listaEmpregados.size());
+    }
+    
+
+    /**
+     * Explicando cada linha de código - testBuscarEmpregadPorId()
+     * 
+     * 1. `@DisplayName("Teste para buscar empregado por id")`: Esta anotação é usada para definir um nome descritivo para o teste que será 
+     *     exibido quando o teste for executado. É uma boa prática dar nomes descritivos aos testes para que você possa entender facilmente o 
+     *     que o teste está fazendo.
+     * 
+     * 2. `@Test`: Esta anotação indica que o método é um teste que deve ser executado pelo mecanismo de teste JUnit.
+     * 
+     * 3. `void testBuscarEmpregadPorId()`: Este é o método de teste em si. Ele é responsável por testar se a busca de um empregado por ID 
+     *     funciona corretamente.
+     * 
+     * 4. `// Given - gerando os dados antes do condicionamento.`: Nesta seção está preparando o cenário do teste. Cria um objeto `Empregado` 
+     *     usando o método `criarEmpregado()`.
+     * 
+     * 5. `given(empregadoRepository.findById(1L)).willReturn(Optional.of(empregado));`: Esta linha está configurando um comportamento simulado 
+     *     usando o Mockito. Ela diz que, quando o método `findById` do `empregadoRepository` for chamado com o argumento `1L`, ele deve retornar 
+     *     um `Optional` contendo o objeto `empregado` que foi criado anteriormente.
+     * 
+     * 6. `// when - criando a condição (o comportamento) a ser testado`: Nesta seção, executa a ação que deseja testar. Aqui, chama o método 
+     *    `getEmpregadoById` do `empregadoServiceImpl` com o ID do empregado que foi configurado no cenário (neste caso, `1L`).
+     * 
+     * 7. `Empregado buscarEmpregado = empregadoServiceImpl.getEmpregadoById(empregado.getId()).get();`: Aqui, está armazenando o resultado da 
+     *     busca em uma variável chamada `buscarEmpregado`.
+     * 
+     * 8. `// then - verificar mensagem de validação`: Nesta seção, Aqui, está fazendo as verificações para garantir que o comportamento seja o 
+     *     esperado.
+     *        - `assertNotNull(buscarEmpregado);`: VAqui, verifica se o objeto `buscarEmpregado` não é nulo. Isso garante que a busca retornou 
+     *           algum resultado.
+     *        - `assertEquals("Comparando se pertence ao mesmo id", empregado, buscarEmpregado);`: Aqui, compara se o objeto `buscarEmpregado` é 
+     *           igual ao objeto `empregado` que foi criado no cenário. Isso verifica se os detalhes do empregado recuperado correspondem ao que 
+     *           você configurou no cenário.
+     * 
+     * No geral, este teste garante que a busca de empregados por ID está funcionando corretamente, retornando o empregado correto e não nulo. 
+     * Ele também faz uma comparação para garantir que o empregado recuperado seja igual ao empregado configurado no cenário, verificando se 
+     * eles têm os mesmos detalhes.
+    */
+    @DisplayName("Teste para buscar empregado por id")
+    @Test
+    void testBuscarEmpregadPorId(){
+        
+        // Given - gerando os dados antes do condicionamento.
+        Empregado empregado = criarEmpregado();
+        given(empregadoRepository.findById(1L)).willReturn(Optional.of(empregado));
+
+        // when - criando a condição (o comportamento) a ser testado 
+       Empregado buscarEmpregado = empregadoServiceImpl.getEmpregadoById(empregado.getId()).get();
+    
+        // then - verificar mensagem de validação
+        assertNotNull(buscarEmpregado);
+        assertEquals("Comparando se pertence ao mesmo id", empregado, buscarEmpregado);
     }
 }
