@@ -7,12 +7,16 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 //Adicionado essa importação
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -357,5 +361,42 @@ public class EmpregadoServiceTest {
         assertNotNull(atualizarEmpregado);
         assertEquals(atualizarEmpregado.getEmail(), empregado.getEmail()); //ou
         assertEquals("Daniel Up", empregado.getNome());
+    }
+
+
+    /**
+     * Explicando cada linha de código - 
+     * 
+     * 1. **Given (Dado)**: Nesta seção, está configurando o ambiente e os dados iniciais para o seu teste. No seu caso:
+     *       - Foi definido o `empregadoId` como 1L, que é o ID do empregado que você deseja excluir.
+     *       - Aqui, usa o método `doNothing().when(empregadoRepository).deleteById(empregadoId)` para configurar o mock do `empregadoRepository`. 
+     *         Isso significa que quando o método `deleteById` do `empregadoRepository` for chamado com o `empregadoId`, ele não fará nada.
+     * 
+     * 2. **When (Quando)**: Nesta seção, executa a operação ou o comportamento que deseja testar. No seu caso:
+     *       - Aqui, chama `empregadoServiceImpl.deleteEmpregado(empregadoId)` para excluir o empregado com o ID fornecido.
+     * 
+     * 3. **Then (Então)**: Aqui, verifica se o comportamento esperado ocorreu após a operação do "When". No seu caso:
+     *       - Aqui, usa `verify(empregadoRepository, times(1)).deleteById(empregadoId)` para verificar se o método `deleteById` do 
+     *         `empregadoRepository` foi chamado exatamente uma vez com o `empregadoId`. Isso garante que o serviço `empregadoServiceImpl` 
+     *         realmente chamou o método de exclusão no repositório com o ID correto.
+     * 
+     * Em resumo, esse teste unitário verifica se o serviço `deleteEmpregado` do `empregadoServiceImpl` está excluindo o empregado correto usando 
+     * o ID fornecido, e se ele está interagindo corretamente com o repositório (neste caso, representado pelo `empregadoRepository`) para realizar 
+     * a exclusão. O método `doNothing()` no `given` é usado para simular o comportamento do repositório, garantindo que a exclusão não seja 
+     * executada, pois isso é apenas um teste do serviço, não do repositório real.
+     * */
+    @DisplayName("Teste para deletar empregado por id")
+    @Test
+    void testDeletarEmpregadPorId(){
+        
+        // Given - gerando os dados antes do condicionamento.
+        long empregadoId = 1L;
+        doNothing().when(empregadoRepository).deleteById(empregadoId);
+
+        // when - criando a condição (o comportamento) a ser testado 
+       empregadoServiceImpl.deleteEmpregado(empregadoId);
+    
+        // then - verificar mensagem de validação
+        verify(empregadoRepository, times(1)).deleteById(empregadoId);
     }
 }
