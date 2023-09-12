@@ -308,4 +308,54 @@ public class EmpregadoServiceTest {
         assertNotNull(buscarEmpregado);
         assertEquals("Comparando se pertence ao mesmo id", empregado, buscarEmpregado);
     }
+
+
+    /**
+     * Explicando cada linha de código - testAtualizarEmpregadPorId()
+     * 
+     * 1. `void testAtualizarEmpregadPorId()`: Este é o método de teste em si. Ele é responsável por testar se a atualização de um empregado 
+     *     funciona corretamente.
+     * 
+     * 2. `// Given - gerando os dados antes do condicionamento.`: Nesta seção, está preparando o cenário do teste. Aqui, cria um objeto 
+     *     `Empregado` usando o método `criarEmpregado()`. Em seguida, configura o comportamento simulado do método `save` do 
+     *     `empregadoRepository` usando o Mockito. Isso significa que, quando o método `save` for chamado com o objeto `empregado`, ele deve 
+     *      retornar o mesmo objeto `empregado`. Depois, atualiza os detalhes do `empregado`, mudando o nome para "Daniel Up" e o email para 
+     *     "d4n.penelva@gmail.com".
+     * 
+     * 3. `// when - criando a condição (o comportamento) a ser testado`: Nesta seção, executa a ação que deseja testar. Aqui, chama o método 
+     *    `updateEmpregado` do `empregadoServiceImpl` com o objeto `empregado` que foi configurado no cenário.
+     * 
+     * 4. `Empregado atualizarEmpregado = empregadoServiceImpl.updateEmpregado(empregado);`: Aqui, está armazenando o resultado da atualização 
+     *     em uma variável chamada `atualizarEmpregado`.
+     * 
+     * 5. `// then - verificar mensagem de validação`: Nesta seção, está fazendo as verificações para garantir que o comportamento seja o 
+     *    esperado.
+     *       - `assertNotNull(atualizarEmpregado);`: Aqui, verifica se o objeto `atualizarEmpregado` não é nulo. Isso garante que a atualização 
+     *          tenha retornado algum resultado.
+     *       - `assertEquals(atualizarEmpregado.getEmail(), empregado.getEmail());`: Aqui, verifica se o email do objeto `atualizarEmpregado` é 
+     *          igual ao email que você configurou no cenário. Isso garante que a atualização ocorreu com sucesso.
+     *       - `assertEquals("Daniel Up", empregado.getNome());`: Aqui, verifica se o nome do objeto `empregado` foi atualizado corretamente 
+     *          para "Daniel Up".
+     * 
+     * No geral, este teste garante que a atualização de empregados funcione corretamente, atualizando os detalhes do empregado de acordo com as 
+     * mudanças feitas antes de verificar se a atualização foi bem-sucedida.
+     * */
+    @DisplayName("Teste para atualizar empregado")
+    @Test
+    void testAtualizarEmpregadPorId(){
+        
+        // Given - gerando os dados antes do condicionamento.
+        Empregado empregado = criarEmpregado();
+        given(empregadoRepository.save(empregado)).willReturn(empregado);
+        empregado.setNome("Daniel Up");
+        empregado.setEmail("d4n.penelva@gmail.com");
+
+        // when - criando a condição (o comportamento) a ser testado 
+       Empregado atualizarEmpregado = empregadoServiceImpl.updateEmpregado(empregado);
+    
+        // then - verificar mensagem de validação
+        assertNotNull(atualizarEmpregado);
+        assertEquals(atualizarEmpregado.getEmail(), empregado.getEmail()); //ou
+        assertEquals("Daniel Up", empregado.getNome());
+    }
 }
