@@ -16,7 +16,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -32,7 +31,7 @@ import com.daniel.testeunitario.repository.EmpregadoRepository;
 import com.daniel.testeunitario.service.impl.EmpregadoServiceImpl;
 
 @ExtendWith(MockitoExtension.class)
-@SpringBootTest
+@SpringBootTest 
 public class EmpregadoServiceTest {
 
     @Mock

@@ -235,3 +235,379 @@ o comportamento do mock e verificar como a classe `MinhaClasse` interage com sua
 
 Em resumo, `@ExtendWith(MockitoExtension.class)` é uma anotação essencial para integrar o JUnit 5 com o Mockito e facilitar a escrita de testes
 unitários envolvendo mocks.
+
+
+----------------------------------------------------------------------- // -----------------------------------------------------------------------
+
+Anotação `@WebMvcTest`
+
+A anotação `@WebMvcTest` é uma anotação fornecida pelo Spring Boot que é usada para escrever testes de unidade para aplicativos da web baseados 
+em Spring MVC. Ela é projetada para testar apenas a camada de controlador da sua aplicação, isolando-a do restante do contexto da aplicação. Isso 
+é útil quando você deseja testar apenas o comportamento dos controladores web sem a necessidade de configurar todo o contexto de aplicação, como 
+serviços, componentes de acesso a dados e outras partes.
+
+Aqui estão algumas características e uso comuns da anotação `@WebMvcTest`:
+
+1. **Escopo Limitado**: A anotação `@WebMvcTest` carrega apenas a camada de controlador da sua aplicação e desabilita automaticamente a 
+configuração de outras partes do aplicativo, como serviços, componentes de acesso a dados e filtros globais. Isso ajuda a manter seus testes de 
+unidade focados na funcionalidade dos controladores.
+
+2. **Injeção de Dependência de Controladores**: Você pode injetar controladores diretamente em seus testes e testar a lógica de manipulação de 
+solicitações HTTP, como roteamento, validação de entrada, etc.
+
+3. **Simulação de Requisições HTTP**: A anotação `@WebMvcTest` fornece um objeto `MockMvc` que permite simular solicitações HTTP, como GET, POST, 
+PUT e DELETE, para seus endpoints. Isso permite que você teste como os controladores respondem a diferentes solicitações.
+
+4. **Anotações de Filtragem**: Você pode usar anotações como `@WithMockUser` ou `@WithMockMvcUser` para simular usuários autenticados ou 
+autorizados durante os testes.
+
+Em resumo, `@WebMvcTest` é uma anotação útil para escrever testes de unidade para controladores web em aplicativos Spring MVC. Ela fornece um 
+ambiente isolado para testar a lógica de controladores, permitindo que você se concentre na funcionalidade da camada de controlador sem carregar 
+todo o contexto da aplicação.
+
+-------------------- // --------------------
+
+classe MockMvc
+
+A classe `MockMvc` faz parte do módulo Spring Test do Spring Framework e é uma ferramenta poderosa para testar controladores em aplicativos 
+Spring MVC. Ela permite simular solicitações HTTP, interagir com controladores e verificar as respostas geradas por eles, tudo isso sem a 
+necessidade de iniciar um servidor web real. Isso torna os testes de controladores muito mais rápidos e eficientes.
+
+Aqui estão algumas das principais funcionalidades e usos da classe `MockMvc`:
+
+1. **Simulação de Solicitações HTTP**: Com o `MockMvc`, você pode simular diferentes tipos de solicitações HTTP, como GET, POST, PUT e DELETE, 
+enviando solicitações para os endpoints dos controladores da sua aplicação.
+
+2. **Configuração de Parâmetros e Headers**: Você pode configurar parâmetros de consulta, cabeçalhos e corpo da solicitação para simular 
+solicitações específicas. Isso permite testar cenários diferentes e garantir que seus controladores lidem corretamente com diferentes tipos de 
+entrada.
+
+3. **Verificação de Respostas**: O `MockMvc` permite verificar as respostas geradas pelos controladores. Você pode verificar o status HTTP da 
+resposta, o conteúdo da resposta, os cabeçalhos da resposta e muito mais para garantir que a lógica do controlador esteja funcionando 
+corretamente.
+
+4. **Autenticação e Autorização**: Você pode simular cenários de autenticação e autorização usando anotações como `@WithMockUser` para testar 
+como seu controlador responde a solicitações de usuários autenticados ou autorizados.
+
+5. **Integração com Bibliotecas de Assertiva**: O `MockMvc` funciona bem com bibliotecas de assertiva, como o JUnit e o AssertJ, para simplificar 
+a verificação de resultados nos testes.
+
+Aqui está um exemplo simples qualquer de como usar a classe `MockMvc` para testar um controlador Spring MVC:
+
+```java
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+
+@WebMvcTest(MeuControlador.class)
+public class MeuControladorTest {
+
+    @Autowired
+    private MockMvc mockMvc;
+
+    @Test
+    public void testEndpoint() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/meu-endpoint"))
+               .andExpect(MockMvcResultMatchers.status().isOk())
+               .andExpect(MockMvcResultMatchers.content().string("Resposta Esperada"));
+    }
+}
+```
+
+Neste exemplo, estamos usando o `MockMvc` para enviar uma solicitação GET para o endpoint "/meu-endpoint" do controlador `MeuControlador`. Em 
+seguida, estamos verificando se a resposta possui um status HTTP "200 OK" e se o conteúdo da resposta é igual a "Resposta Esperada".
+
+Em resumo, a classe `MockMvc` é uma ferramenta essencial para escrever testes de controladores em aplicativos Spring MVC. Ela permite que você 
+simule solicitações HTTP, teste a lógica do controlador e verifique as respostas geradas de forma eficiente e eficaz. Isso é fundamental para 
+garantir que a camada de controlador da sua aplicação funcione conforme o esperado.
+
+-------------------- // --------------------
+
+Anotação @MockBean
+
+A anotação `@MockBean` é uma anotação fornecida pelo Spring Boot e é usada em testes de integração para criar e injetar um bean simulado (mock) 
+em seu contexto de aplicação. Ela é frequentemente usada em conjunto com estruturas de teste, como JUnit, para substituir componentes reais de 
+sua aplicação por mocks, a fim de isolar o código que está sendo testado e controlar o comportamento de dependências específicas.
+
+Aqui estão os principais usos e características da anotação `@MockBean`:
+
+1. **Simulação de Dependências**: A anotação `@MockBean` é usada para criar um bean simulado que substitui uma dependência real na aplicação 
+durante um teste. Isso é útil para isolar o componente que está sendo testado e garantir que ele seja executado independentemente de suas 
+dependências.
+
+2. **Injeção Automática**: O bean simulado criado com `@MockBean` é automaticamente injetado no contexto da aplicação durante o teste, 
+substituindo qualquer bean com o mesmo tipo no contexto. Isso significa que as classes de teste podem interagir com o mock como se fosse uma 
+dependência real.
+
+3. **Configuração de Comportamento**: Você pode configurar o comportamento do bean simulado usando bibliotecas de mock, como Mockito ou EasyMock. 
+Isso permite que você especifique como o mock deve responder a chamadas de métodos específicos, retornando valores pré-definidos ou lançando 
+exceções.
+
+4. **Teste de Comportamento**: A anotação `@MockBean` é frequentemente usada para testar o comportamento da aplicação quando suas dependências 
+retornam valores ou lançam exceções específicas. Isso é útil para verificar como a aplicação lida com diferentes cenários.
+
+5. **Cenários de Teste Complexos**: Você pode usar `@MockBean` para criar mocks de dependências em cenários complexos, como testes de integração 
+que envolvem acesso a bancos de dados, serviços externos ou integração com outras partes da aplicação.
+
+Em resumo, a anotação `@MockBean` é uma ferramenta importante para testes de integração em aplicativos Spring Boot. Ela permite criar e 
+configurar mocks de dependências, substituindo componentes reais para isolar o código que está sendo testado e controlar o comportamento de 
+dependências específicas em cenários de teste. Isso é fundamental para testar o comportamento da aplicação em diferentes condições e cenários.
+
+-------------------- // --------------------
+
+classe ObjectMapper
+
+A classe `ObjectMapper` faz parte da biblioteca Jackson, que é amplamente usada em Java para trabalhar com JSON. O `ObjectMapper` é uma classe 
+fundamental para serialização (conversão de objetos Java para JSON) e desserialização (conversão de JSON de volta para objetos Java) de dados. 
+Ele oferece uma ampla variedade de recursos e configurações para lidar com operações JSON de maneira flexível e personalizada.
+
+Aqui estão algumas das principais funcionalidades e usos da classe `ObjectMapper`:
+
+1. **Serialização de Objetos Java para JSON**: O `ObjectMapper` permite converter objetos Java em representações JSON. Isso é útil quando você 
+deseja enviar dados de um aplicativo Java para outro aplicativo ou serviço que utiliza JSON como formato de troca de dados.
+
+```java
+// Converter um objeto Java em JSON
+ObjectMapper objectMapper = new ObjectMapper();
+String json = objectMapper.writeValueAsString(objetoJava);
+```
+
+2. **Desserialização de JSON para Objetos Java**: Você pode usar o `ObjectMapper` para converter dados JSON de volta em objetos Java. Isso é útil 
+quando você recebe dados JSON de uma solicitação HTTP ou de uma fonte externa e precisa trabalhar com eles em seu aplicativo Java.
+
+```java
+// Converter JSON em um objeto Java
+ObjectMapper objectMapper = new ObjectMapper();
+MeuObjetoJava objetoJava = objectMapper.readValue(json, MeuObjetoJava.class);
+```
+
+3. **Personalização da Serialização e Desserialização**: O `ObjectMapper` permite configurar regras específicas para a serialização e 
+desserialização de objetos, como a exclusão de campos específicos, a formatação de datas, a manipulação de valores nulos, etc.
+
+```java
+ObjectMapper objectMapper = new ObjectMapper();
+objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
+```
+
+4. **Manipulação de Tipos Complexos**: O `ObjectMapper` lida bem com tipos complexos, como coleções, mapas, tipos genéricos e classes aninhadas. 
+Ele pode serializar e desserializar esses tipos com facilidade.
+
+5. **Suporte a Anotações**: O `ObjectMapper` é compatível com anotações, como `@JsonProperty` e `@JsonIgnore`, que podem ser usadas para 
+personalizar a serialização e desserialização de objetos.
+
+6. **Tratamento de Exceções**: O `ObjectMapper` gera exceções específicas, como `JsonParseException` e `JsonMappingException`, quando ocorrem 
+erros durante a conversão JSON, permitindo que você trate esses erros de maneira adequada.
+
+7. **Configuração Global**: O `ObjectMapper` pode ser configurado globalmente para definir comportamentos padrão em toda a aplicação, garantindo 
+consistência na serialização e desserialização.
+
+```java
+ObjectMapper objectMapper = new ObjectMapper();
+objectMapper.setDefaultPropertyInclusion(JsonInclude.Include.NON_NULL);
+```
+
+O `ObjectMapper` é uma ferramenta essencial ao trabalhar com JSON em aplicativos Java, e sua flexibilidade e recursos avançados o tornam 
+amplamente utilizado em desenvolvimento web, APIs RESTful, sistemas de armazenamento de dados e muito mais. Ele oferece controle total sobre 
+como os dados são convertidos entre objetos Java e JSON, tornando-o uma escolha valiosa para muitos desenvolvedores.
+
+-------------------- // --------------------
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+
+O import `import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;` faz parte do pacote 
+`org.springframework.test.web.servlet.request` do framework Spring MVC. Esse import está relacionado ao uso da classe `MockMvcRequestBuilders`, 
+que é uma classe utilitária usada para criar objetos que representam solicitações HTTP simuladas ao testar controladores em aplicativos Spring 
+MVC.
+
+A anotação `@WebMvcTest`, que mencionamos anteriormente, permite que você injete um objeto `MockMvc` em seus testes de unidade. O `MockMvc` é uma 
+classe que permite simular solicitações HTTP para seus endpoints de controlador sem a necessidade de iniciar um servidor web real. Para criar 
+solicitações simuladas, você pode usar métodos estáticos da classe `MockMvcRequestBuilders`, que é onde entra o import.
+
+Esses métodos estáticos de `MockMvcRequestBuilders` permitem construir objetos que representam diferentes tipos de solicitações HTTP, como GET, 
+POST, PUT, DELETE, entre outros. Cada método estático corresponde a um tipo de solicitação e permite que você especifique o caminho do endpoint, 
+os parâmetros da solicitação, o corpo da solicitação (no caso de solicitações POST ou PUT) e outros detalhes da solicitação.
+
+Aqui está um exemplo simples de como usar `MockMvcRequestBuilders` para criar uma solicitação GET simulada:
+
+```java
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+
+// ...
+
+// Criar uma solicitação GET simulada para o endpoint "/meu-endpoint"
+MockMvc mockMvc = MockMvcBuilders.standaloneSetup(meuControlador).build();
+mockMvc.perform(MockMvcRequestBuilders.get("/meu-endpoint"))
+       .andExpect(MockMvcResultMatchers.status().isOk())
+       .andExpect(MockMvcResultMatchers.content().string("Resposta Esperada"));
+```
+
+Neste exemplo, `MockMvcRequestBuilders.get("/meu-endpoint")` é usado para criar uma solicitação HTTP GET simulada para o endpoint "/meu-endpoint". 
+A solicitação simulada é então enviada ao controlador usando o método `perform` do objeto `MockMvc`.
+
+OBS. Caso queira usar os import static é possível chamar da seguinte maneira, por exemplo, chamando a solicitação 'post':
+
+```java
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+
+// ...
+
+// Criar uma solicitação POST simulada para o endpoint "/api/empregados"
+ResultActions response = mockMvc.perform(post("/api/empregados")
+                .contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(empregado)));
+```
+
+Em resumo, o import `import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;` permite o uso conveniente dos métodos 
+estáticos da classe `MockMvcRequestBuilders` para criar solicitações HTTP simuladas ao testar controladores Spring MVC em seus testes de unidade. 
+Isso facilita a criação e execução de testes para verificar o comportamento de seus endpoints de controlador.
+
+-------------------- // --------------------
+
+Os três imports abaixo estão relacionados ao uso de assertivas (afirmações) em testes de unidade com o framework Spring MVC e JUnit. Eles são 
+comumente usados para verificar o comportamento esperado ao testar controladores Spring MVC usando a classe `MockMvc`. 
+Vou explicar cada um deles:
+
+1. `import static org.hamcrest.CoreMatchers.is;`: Este import é usado para importar um método estático `is` da classe `CoreMatchers` da 
+biblioteca Hamcrest. A biblioteca Hamcrest fornece uma coleção de correspondentes (matchers) que são usados em testes para verificar se os 
+resultados obtidos são iguais aos resultados esperados. O `is` é um matcher simples que é usado para verificar se o valor é igual a um valor 
+específico.
+
+   Exemplo de uso:
+   ```java
+   import static org.hamcrest.CoreMatchers.is;
+   import static org.hamcrest.MatcherAssert.assertThat;
+
+   // ...
+
+   int resultado = minhaFuncao();
+   assertThat(resultado, is(42)); // Verifica se 'resultado' é igual a 42
+   ```
+
+OBS. Caso não queira usar os import static é possível chamar diretamente pela Classe 'CoreMatchers', por exemplo:
+
+Exemplo de uso:
+   ```java
+   import org.hamcrest.CoreMatchers;
+   import static org.hamcrest.MatcherAssert.assertThat;
+
+   // ...
+
+   int resultado = minhaFuncao();
+   assertThat(resultado, CoreMatchers.is(42)); // Verifica se 'resultado' é igual a 42
+   ```
+
+2. `import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;`: Este import é usado para importar vários métodos 
+estáticos da classe `MockMvcResultMatchers` do framework Spring Test. Esses métodos são usados para configurar assertivas (afirmações) em testes 
+de unidade que envolvem o uso de `MockMvc` para testar controladores Spring MVC.
+
+   Exemplo de uso:
+   ```java
+   import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+   import org.springframework.test.web.servlet.MockMvc;
+   import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+   import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+
+   // ...
+
+   MockMvc mockMvc = MockMvcBuilders.standaloneSetup(meuControlador).build();
+   mockMvc.perform(MockMvcRequestBuilders.get("/meu-endpoint"))
+          .andExpect(status().isOk()) // Verifica se o status HTTP é OK (200)
+          .andExpect(content().string("Resposta Esperada")); // Verifica o conteúdo da resposta
+   ```
+
+3. `import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;`: Este import é usado para importar métodos estáticos da 
+classe `MockMvcResultHandlers` do framework Spring Test. Esses métodos são usados para adicionar manipuladores de resultados às suas solicitações 
+simuladas com `MockMvc`. Os manipuladores de resultados permitem registrar informações sobre a execução das solicitações, o que é útil para 
+depuração e diagnóstico.
+
+   Exemplo de uso:
+   ```java
+   import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
+   import org.springframework.test.web.servlet.MockMvc;
+   import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+   import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+
+   // ...
+
+   MockMvc mockMvc = MockMvcBuilders.standaloneSetup(meuControlador).build();
+   mockMvc.perform(MockMvcRequestBuilders.get("/meu-endpoint"))
+          .andDo(print()); // Imprime informações de resultado para depuração
+   ```
+
+Em resumo, esses imports são usados em testes de unidade com Spring MVC e JUnit para realizar as seguintes tarefas:
+
+- `org.hamcrest.CoreMatchers.is` é usado para verificar igualdade de valores.
+- `org.springframework.test.web.servlet.result.MockMvcResultMatchers.*` é usado para configurar assertivas em testes de controladores Spring MVC.
+- `org.springframework.test.web.servlet.result.MockMvcResultHandlers.*` é usado para adicionar manipuladores de resultados para depuração e 
+   diagnóstico.
+
+-------------------- // --------------------
+
+Explicando o método de teste -> testCriarEmpregado()
+
+O método de teste de unidade verifica o comportamento de um endpoint para criar um empregado em um aplicativo Spring Boot que utiliza o framework 
+Spring MVC. Vou explicar o que está acontecendo passo a passo:
+
+```java
+@Test
+void testCriarEmpregado() throws Exception {
+    // given
+    Empregado empregado = criarEmpregado();
+```
+
+Nesta seção, o teste começa configurando o cenário (given). Ele cria uma instância de `Empregado` chamada `empregado` usando um método 
+`criarEmpregado()`. Este objeto `empregado` será usado para simular a entrada de dados para o endpoint que está sendo testado.
+
+```java
+    given(empregadoServiceMock.salvarEmpregado(any(Empregado.class)))
+        .willAnswer((invocation) -> invocation.getArgument(0));
+```
+
+Nesta parte, o teste configura um comportamento simulado para o serviço `empregadoServiceMock`. Ele usa o método `given()` do framework Mockito 
+para indicar que, quando o método `salvarEmpregado()` do serviço é chamado com qualquer instância de `Empregado` como argumento, ele retornará 
+exatamente o mesmo objeto `Empregado`. Isso simula o comportamento de salvar um empregado no serviço, retornando o próprio empregado.
+
+```java
+    ResultActions response = mockMvc.perform(post("/api/empregados")
+            .contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(empregado)));
+```
+
+Nesta parte, o teste usa o objeto `mockMvc` (que é uma instância de `MockMvc` criada anteriormente) para simular uma solicitação POST para o 
+endpoint "/api/empregados". Ele configura o tipo de conteúdo da solicitação como JSON e envia os dados do `empregado` como o corpo da solicitação 
+após convertê-lo em JSON usando o `objectMapper`.
+
+```java
+    // then
+    response.andDo(print())
+            .andExpect(status().isCreated())
+            .andExpect(jsonPath("$.nome", is(empregado.getNome())))
+            .andExpect(jsonPath("$.sobrenome", is(empregado.getSobrenome())))
+            .andExpect(jsonPath("$.email", is(empregado.getEmail())));
+```
+
+Na seção "then" do teste, ele começa verificando o resultado da solicitação que foi enviada. Aqui estão as verificações realizadas:
+
+- `response.andDo(print())`: Isso adiciona um manipulador de resultados para imprimir informações de resultado no console, o que é útil para 
+   depuração e diagnóstico.
+
+- `andExpect(status().isCreated())`: Isso verifica se a resposta possui um status HTTP "201 Created", que geralmente é usado para indicar que um 
+   novo recurso foi criado com sucesso.
+
+- `andExpect(jsonPath("$.nome", is(empregado.getNome())))`: Isso verifica se o campo "nome" no corpo da resposta JSON corresponde ao nome do 
+   empregado que foi enviado na solicitação.
+
+- `andExpect(jsonPath("$.sobrenome", is(empregado.getSobrenome())))`: Isso verifica se o campo "sobrenome" no corpo da resposta JSON corresponde 
+   ao sobrenome do empregado que foi enviado na solicitação.
+
+- `andExpect(jsonPath("$.email", is(empregado.getEmail())))`: Isso verifica se o campo "email" no corpo da resposta JSON corresponde ao email do 
+   empregado que foi enviado na solicitação.
+
+Em resumo, este teste de unidade verifica se o endpoint "/api/empregados" em seu aplicativo Spring Boot funciona corretamente ao criar um 
+empregado. Ele simula a solicitação POST, verifica se a resposta tem o status "201 Created" e verifica se os dados do empregado no corpo da 
+resposta correspondem aos dados do empregado que foram enviados na solicitação. Esse tipo de teste é útil para garantir que a funcionalidade de 
+criação de empregados esteja funcionando conforme o esperado.
