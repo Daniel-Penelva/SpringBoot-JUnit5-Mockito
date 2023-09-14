@@ -18,6 +18,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*; // métodos são usados para adicionar manipuladores de resultados às suas solicitações simuladas com `MockMvc`
 
@@ -101,6 +102,26 @@ public class EmpregadoControllerTest {
         response.andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(jsonPath("$.size()", is(listaEmpregado.size())));
+    }
+
+    @DisplayName("Teste para buscar empregado por id")
+    @Test
+    void testBuscarEmpregadoPorId() throws Exception {
+
+        // given
+        Empregado empregado = criarEmpregado();
+
+        given(empregadoServiceMock.getEmpregadoById(empregado.getId())).willReturn(Optional.of(empregado));
+
+        // when
+        ResultActions response = mockMvc.perform(get("/api/empregados/{id}", empregado.getId()));
+
+        //then
+        response.andExpect(status().isOk())
+                .andDo(print())
+                .andExpect(jsonPath("$.nome", is(empregado.getNome())))
+                .andExpect(jsonPath("$.sobrenome", is(empregado.getSobrenome())))
+                .andExpect(jsonPath("$.email", is(empregado.getEmail())));
     }
 
 }

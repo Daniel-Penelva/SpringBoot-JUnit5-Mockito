@@ -715,3 +715,68 @@ Em resumo, este teste de unidade verifica se o endpoint "/api/empregados" em seu
 Ele configura um cenário com dados fictícios, simula uma solicitação GET para o endpoint e verifica se a resposta tem o status HTTP esperado e 
 se o tamanho da lista de empregados na resposta corresponde ao tamanho da lista de empregados no cenário configurado. Esse tipo de teste é útil 
 para garantir que a funcionalidade de listagem de empregados esteja funcionando conforme o esperado.
+
+-------------------- // --------------------
+
+Explicando o método de teste -> testBuscarEmpregadoPorId()
+
+Este script é um exemplo de um método de teste de unidade que verifica o comportamento de um endpoint para buscar um empregado por ID em um 
+aplicativo Spring Boot usando o framework Spring MVC e Mockito para simular o serviço. Vou explicar passo a passo o que está acontecendo neste 
+método de teste:
+
+```java
+void testBuscarEmpregadoPorId() throws Exception {
+    // given
+    Empregado empregado = criarEmpregado();
+```
+
+Nesta seção, o teste está configurando o cenário (given) para o teste. Ele cria um objeto `Empregado` chamado `empregado` usando um método 
+`criarEmpregado()` (que provavelmente é definido em algum lugar no código de teste). Este objeto `empregado` será usado para simular um empregado 
+que será retornado quando o serviço `empregadoServiceMock` for chamado com um ID específico.
+
+```java
+    given(empregadoServiceMock.getEmpregadoById(empregado.getId())).willReturn(Optional.of(empregado));
+```
+
+Nesta parte, o teste configura um comportamento simulado para o serviço `empregadoServiceMock`. Ele usa o método `given()` do Mockito para 
+indicar que quando o método `getEmpregadoById()` do serviço é chamado com o ID do `empregado`, ele deve retornar um `Optional` contendo o objeto 
+`empregado`. Isso simula o comportamento de busca de um empregado pelo ID no serviço.
+
+```java
+    // when
+    ResultActions response = mockMvc.perform(get("/api/empregados/{id}", empregado.getId()));
+```
+
+Nesta parte, o teste executa a ação que está sendo testada (when). Ele usa o objeto `mockMvc` para simular uma solicitação GET para o endpoint 
+"/api/empregados/{id}", onde `{id}` é substituído pelo ID do `empregado` criado anteriormente.
+
+```java
+    // then
+    response.andExpect(status().isOk())
+            .andDo(print())
+            .andExpect(jsonPath("$.nome", is(empregado.getNome())))
+            .andExpect(jsonPath("$.sobrenome", is(empregado.getSobrenome())))
+            .andExpect(jsonPath("$.email", is(empregado.getEmail())));
+```
+
+Na seção "then" do teste, ele começa a verificar o resultado da solicitação que foi enviada. Aqui estão as verificações realizadas:
+
+- `response.andExpect(status().isOk())`: Isso verifica se a resposta tem um status HTTP "200 OK", indicando que a solicitação foi bem-sucedida.
+
+- `response.andDo(print())`: Isso adiciona um manipulador de resultados para imprimir informações de resultado no console, o que é útil para 
+   depuração e diagnóstico.
+
+- `response.andExpect(jsonPath("$.nome", is(empregado.getNome())))`: Isso verifica se o campo "nome" no corpo da resposta JSON corresponde ao 
+   nome do empregado que foi retornado pelo serviço.
+
+- `response.andExpect(jsonPath("$.sobrenome", is(empregado.getSobrenome())))`: Isso verifica se o campo "sobrenome" no corpo da resposta JSON 
+   corresponde ao sobrenome do empregado que foi retornado pelo serviço.
+
+- `response.andExpect(jsonPath("$.email", is(empregado.getEmail())))`: Isso verifica se o campo "email" no corpo da resposta JSON corresponde ao 
+   email do empregado que foi retornado pelo serviço.
+
+Em resumo, este teste de unidade verifica se o endpoint "/api/empregados/{id}" em seu aplicativo Spring Boot está retornando corretamente um 
+empregado específico com base em um ID. Ele configura um cenário com um empregado fictício, simula uma solicitação GET para o endpoint e 
+verifica se a resposta tem o status HTTP esperado e se os dados do empregado no corpo da resposta correspondem aos dados do empregado que foram 
+retornados pelo serviço. Esse tipo de teste é útil para garantir que a funcionalidade de busca de empregado por ID esteja funcionando conforme 
+o esperado.
