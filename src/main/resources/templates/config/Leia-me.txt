@@ -611,3 +611,107 @@ Em resumo, este teste de unidade verifica se o endpoint "/api/empregados" em seu
 empregado. Ele simula a solicitação POST, verifica se a resposta tem o status "201 Created" e verifica se os dados do empregado no corpo da 
 resposta correspondem aos dados do empregado que foram enviados na solicitação. Esse tipo de teste é útil para garantir que a funcionalidade de 
 criação de empregados esteja funcionando conforme o esperado.
+
+-------------------- // --------------------
+
+willAnswer X willReturn
+
+Ambos os métodos `willAnswer()` e `willReturn()` são métodos usados no framework Mockito para configurar o comportamento de objetos mock 
+(simulados) em testes de unidade. Ambos são usados para especificar o que um mock deve fazer quando um método é chamado durante a execução de um 
+teste. No entanto, eles têm finalidades ligeiramente diferentes:
+
+1. **`willAnswer()`**:
+
+   - O método `willAnswer()` é usado para configurar um comportamento personalizado quando um método é chamado em um objeto mock.
+   
+   - Ele permite que você especifique um comportamento personalizado usando uma instância de `Answer`, que é uma interface funcional que 
+     representa uma função que pode ser executada quando o método é chamado.
+
+   - `willAnswer()` é útil quando você precisa realizar operações mais complexas, como processar argumentos do método e retornar um valor com 
+      base nesses argumentos.
+
+   Exemplo:
+   ```java
+   given(myMock.someMethod(anyString())).willAnswer(invocation -> {
+       String arg = invocation.getArgument(0);
+       return "Resposta personalizada para " + arg;
+   });
+   ```
+
+2. **`willReturn()`**:
+
+   - O método `willReturn()` é usado para especificar um valor de retorno simples quando um método é chamado em um objeto mock.
+   
+   - Você usa `willReturn()` quando deseja que o mock retorne um valor específico quando um método é chamado, sem a necessidade de realizar 
+     qualquer lógica personalizada.
+
+   Exemplo:
+   ```java
+   given(myMock.someMethod()).willReturn("Valor de retorno esperado");
+   ```
+
+Ambos os métodos são usados para definir o comportamento de um objeto mock, mas a escolha entre eles depende da complexidade do comportamento ]
+desejado:
+
+- Use `willAnswer()` quando precisar de um comportamento personalizado que envolva lógica mais complexa, como processamento de argumentos ou 
+  decisões com base nos argumentos.
+
+- Use `willReturn()` quando desejar que o mock retorne um valor simples e direto sem qualquer processamento adicional.
+
+Em resumo, `willAnswer()` e `willReturn()` são métodos importantes no Mockito para configurar o comportamento de objetos mock em seus testes de 
+unidade, permitindo que você simule comportamentos específicos durante a execução dos testes. A escolha entre eles depende da complexidade do 
+comportamento que você deseja especificar para o objeto mock.
+
+-------------------- // --------------------
+
+Explicando o método de teste -> testListarEmpregados()
+
+Este script é um exemplo de um método de teste de unidade que verifica o comportamento de um endpoint de listagem de empregados em um aplicativo 
+Spring Boot usando o framework Spring MVC e Mockito para simular o serviço. Vou explicar passo a passo o que está acontecendo neste método de 
+teste:
+
+```java
+void testListarEmpregados() throws Exception {
+    // given
+    List<Empregado> listaEmpregado = new ArrayList<>();
+    listaEmpregado.add(Empregado.builder().nome("Jão").sobrenome("Silva").email("jao@gmail.com").build());
+    listaEmpregado.add(Empregado.builder().nome("Patricia").sobrenome("Nunes").email("patricia@gmail.com").build());
+    listaEmpregado.add(Empregado.builder().nome("Pedro").sobrenome("Marques").email("pedro@gmail.com").build());
+
+    given(empregadoServiceMock.getAllEmpregados()).willReturn(listaEmpregado);
+```
+
+Nesta seção, o teste está configurando o cenário (given) para o teste. Ele cria uma lista de objetos `Empregado` chamada `listaEmpregado` com 
+três objetos `Empregado` preenchidos com informações fictícias. Essa lista será usada para simular os dados que o serviço `empregadoServiceMock` 
+retornará quando o método `getAllEmpregados()` for chamado. O método `given()` do Mockito é usado para especificar que quando `getAllEmpregados()` 
+for chamado no serviço, ele deve retornar a lista `listaEmpregado`.
+
+```java
+    // when
+    ResultActions response = mockMvc.perform(get("/api/empregados"));
+```
+
+Nesta parte, o teste executa a ação que está sendo testada (when). Ele usa o objeto `mockMvc` para simular uma solicitação GET para o endpoint 
+"/api/empregados", que é o endpoint responsável por listar os empregados.
+
+```java
+    // then
+    response.andExpect(status().isOk())
+            .andDo(print())
+            .andExpect(jsonPath("$.size()", is(listaEmpregado.size())));
+```
+
+Na seção "then" do teste, ele começa a verificar o resultado da solicitação que foi enviada. Aqui estão as verificações realizadas:
+
+- `response.andExpect(status().isOk())`: Isso verifica se a resposta tem um status HTTP "200 OK", indicando que a solicitação foi bem-sucedida.
+
+- `response.andDo(print())`: Isso adiciona um manipulador de resultados para imprimir informações de resultado no console, o que é útil para 
+   depuração e diagnóstico.
+
+- `response.andExpect(jsonPath("$.size()", is(listaEmpregado.size())))`: Isso verifica se a resposta JSON tem um campo chamado "size" cujo valor 
+   é igual ao tamanho da lista `listaEmpregado`. Isso é uma maneira de verificar se a resposta JSON contém o número esperado de empregados.
+
+Em resumo, este teste de unidade verifica se o endpoint "/api/empregados" em seu aplicativo Spring Boot está listando os empregados corretamente. 
+Ele configura um cenário com dados fictícios, simula uma solicitação GET para o endpoint e verifica se a resposta tem o status HTTP esperado e 
+se o tamanho da lista de empregados na resposta corresponde ao tamanho da lista de empregados no cenário configurado. Esse tipo de teste é útil 
+para garantir que a funcionalidade de listagem de empregados esteja funcionando conforme o esperado.

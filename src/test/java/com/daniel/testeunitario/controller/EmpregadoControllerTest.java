@@ -16,6 +16,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.hamcrest.CoreMatchers.is; // Teste - verificar se os resultados obtidos são iguais aos resultados esperados.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*; // usado para importar vários métodos estáticos da classe `MockMvcResultMatchers`
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*; // métodos são usados para adicionar manipuladores de resultados às suas solicitações simuladas com `MockMvc`
 
 import static org.mockito.ArgumentMatchers.any;
@@ -25,7 +28,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 import com.daniel.testeunitario.model.Empregado;
-import com.daniel.testeunitario.service.EmpregadoService;
+import com.daniel.testeunitario.service.impl.EmpregadoServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @WebMvcTest
@@ -35,7 +38,7 @@ public class EmpregadoControllerTest {
     private MockMvc mockMvc;
 
     @MockBean
-    private EmpregadoService empregadoServiceMock;
+    private EmpregadoServiceImpl empregadoServiceMock;
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -76,6 +79,28 @@ public class EmpregadoControllerTest {
                 .andExpect(jsonPath("$.nome", is(empregado.getNome())))
                 .andExpect(jsonPath("$.sobrenome", is(empregado.getSobrenome())))
                 .andExpect(jsonPath("$.email", is(empregado.getEmail())));
+    }
+
+
+    @DisplayName("Teste para listar empregados")
+    @Test
+    void testListarEmpregados() throws Exception {
+
+        // given
+        List<Empregado> listaEmpregado = new ArrayList<>();
+        listaEmpregado.add(Empregado.builder().nome("Jão").sobrenome("Silva").email("jao@gmail.com").build());
+        listaEmpregado.add(Empregado.builder().nome("Patricia").sobrenome("Nunes").email("patricia@gmail.com").build());
+        listaEmpregado.add(Empregado.builder().nome("Pedro").sobrenome("Marques").email("pedro@gmail.com").build());
+
+        given(empregadoServiceMock.getAllEmpregados()).willReturn(listaEmpregado);
+
+        // when
+        ResultActions response = mockMvc.perform(get("/api/empregados"));
+
+        //then
+        response.andExpect(status().isOk())
+                .andDo(print())
+                .andExpect(jsonPath("$.size()", is(listaEmpregado.size())));
     }
 
 }
