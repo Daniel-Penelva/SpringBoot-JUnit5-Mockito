@@ -780,3 +780,58 @@ empregado específico com base em um ID. Ele configura um cenário com um empreg
 verifica se a resposta tem o status HTTP esperado e se os dados do empregado no corpo da resposta correspondem aos dados do empregado que foram 
 retornados pelo serviço. Esse tipo de teste é útil para garantir que a funcionalidade de busca de empregado por ID esteja funcionando conforme 
 o esperado.
+
+-------------------- // --------------------
+
+Explicando o método de teste -> testBuscarEmpregadoPorIdNãoEncontrado()
+
+Este script é um exemplo de um método de teste de unidade que verifica o comportamento de um endpoint ao buscar um empregado por ID em um 
+aplicativo Spring Boot usando o framework Spring MVC e Mockito para simular o serviço. No entanto, este teste se concentra em um cenário em que 
+o empregado não é encontrado (ou seja, a resposta deve indicar que o empregado não foi encontrado). Vou explicar passo a passo o que está 
+acontecendo neste método de teste:
+
+```java
+void testBuscarEmpregadoPorIdNãoEncontrado() throws Exception {
+    // given
+    Empregado empregado = criarEmpregado();
+```
+
+Nesta seção, o teste está configurando o cenário (given) para o teste. Ele cria um objeto `Empregado` chamado `empregado` usando um método 
+`criarEmpregado()` (que provavelmente é definido em algum lugar no código de teste). Este objeto `empregado` será usado para simular um empregado 
+que será buscado pelo ID.
+
+```java
+    given(empregadoServiceMock.getEmpregadoById(empregado.getId())).willReturn(Optional.empty());
+```
+
+Nesta parte, o teste configura um comportamento simulado para o serviço `empregadoServiceMock`. Ele usa o método `given()` do Mockito para 
+indicar que quando o método `getEmpregadoById()` do serviço é chamado com o ID do `empregado`, ele deve retornar um `Optional` 
+vazio (`Optional.empty()`). Isso simula o comportamento de busca de um empregado pelo ID que não é encontrado, ou seja, a busca não retorna 
+nenhum resultado.
+
+```java
+    // when
+    ResultActions response = mockMvc.perform(get("/api/empregados/{id}", empregado.getId()));
+```
+
+Nesta parte, o teste executa a ação que está sendo testada (when). Ele usa o objeto `mockMvc` para simular uma solicitação GET para o endpoint 
+"/api/empregados/{id}", onde `{id}` é substituído pelo ID do `empregado` criado anteriormente.
+
+```java
+    // then
+    response.andExpect(status().isNotFound())
+    .andDo(print());
+```
+
+Na seção "then" do teste, ele verifica o resultado da solicitação que foi enviada:
+
+- `response.andExpect(status().isNotFound())`: Isso verifica se a resposta tem um status HTTP "404 Not Found", que é o status comummente usado 
+   para indicar que o recurso solicitado (neste caso, o empregado) não foi encontrado.
+
+- `response.andDo(print())`: Isso adiciona um manipulador de resultados para imprimir informações de resultado no console, o que é útil para 
+   depuração e diagnóstico.
+
+Em resumo, este teste de unidade verifica se o endpoint "/api/empregados/{id}" em seu aplicativo Spring Boot responde corretamente quando um 
+empregado não é encontrado com base em um ID. Ele configura um cenário em que o serviço retorna um `Optional` vazio para simular que o empregado 
+não foi encontrado e, em seguida, verifica se a resposta tem o status HTTP esperado (404 Not Found). Isso é útil para garantir que a 
+funcionalidade de busca de empregado por ID trate adequadamente os casos em que o empregado não existe.

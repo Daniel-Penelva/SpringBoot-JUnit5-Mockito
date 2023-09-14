@@ -124,4 +124,22 @@ public class EmpregadoControllerTest {
                 .andExpect(jsonPath("$.email", is(empregado.getEmail())));
     }
 
+
+    @DisplayName("Teste para buscar empregado por id não encontrado")
+    @Test
+    void testBuscarEmpregadoPorIdNãoEncontrado() throws Exception {
+
+        // given
+        Empregado empregado = criarEmpregado();
+
+        given(empregadoServiceMock.getEmpregadoById(empregado.getId())).willReturn(Optional.empty());
+
+        // when
+        ResultActions response = mockMvc.perform(get("/api/empregados/{id}", empregado.getId()));
+
+        //then
+        response.andExpect(status().isNotFound())
+        .andDo(print());
+    }
+
 }
