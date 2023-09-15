@@ -65,5 +65,21 @@ public class EmpregadoControllerWebTestClientTests {
             .jsonPath("$.sobrenome").isEqualTo("Penelva")
             .jsonPath("$.email").isEqualTo("d4n.andrade@gmail.com");
     }
+
+    @Test
+    @Order(3)
+    void testListarEmpregado() {
+    
+      // Envie uma solicitação HTTP GET para listar todos os empregados
+      webTestClient.get().uri("http://localhost:8080/api/empregados").exchange()
+            .expectStatus().isOk()  // Verifique o código de status da resposta
+            .expectHeader().contentType(MediaType.APPLICATION_JSON)  // Verifique o cabeçalho de tipo de mídia (Content-Type) da resposta
+            .expectBody()  // Verifique o corpo da resposta JSON
+            .jsonPath("$[0].nome").isEqualTo("Daniel")  // Verifique o campo "nome" do primeiro elemento da matriz JSON
+            .jsonPath("$[0].sobrenome").isEqualTo("Penelva")  // Verifique o campo "sobrenome" do primeiro elemento da matriz JSON
+            .jsonPath("$[0].email").isEqualTo("d4n.andrade@gmail.com")  // Verifique o campo "email" do primeiro elemento da matriz JSON
+            .jsonPath("$").isArray()   // Verifique se a resposta é uma matriz JSON
+            .jsonPath("$").value(hasSize(1));  // Verifique o tamanho da matriz JSON (quantidade de elementos)
+    }
     
 }

@@ -1266,3 +1266,35 @@ linguagem para acessar partes específicas de documentos JSON.
 Este teste verifica se a busca de um empregado por meio do endpoint "/api/empregados/{id}" usando o `WebTestClient` funciona conforme o 
 esperado. Ele valida o código de status, o tipo de mídia da resposta e os valores dos campos do empregado obtido na resposta JSON. É um exemplo
 de teste de integração que verifica a funcionalidade de busca de um único recurso em um serviço REST em um aplicativo Spring Boot.
+
+-------------------- // --------------------
+
+Explicando o método de teste de integração -> testListarEmpregado()
+
+1. **Envio da Solicitação GET**: Começa enviando uma solicitação HTTP GET para listar todos os empregados usando `webTestClient.get().uri()`. 
+Isso simula a solicitação para listar todos os empregados.
+
+2. **Verificação do Código de Status**: Verifica o código de status da resposta usando `expectStatus().isOk()`. Isso garante que a resposta 
+tenha um código de status HTTP 200 (OK), indicando que a solicitação foi bem-sucedida.
+
+3. **Verificação do Tipo de Mídia**: Verifica o cabeçalho de tipo de mídia (Content-Type) da resposta usando 
+`expectHeader().contentType(MediaType.APPLICATION_JSON)`. Isso garante que a resposta seja no formato JSON.
+
+4. **Verificação do Corpo da Resposta JSON**: Aqui, usa `expectBody()` para verificar o corpo da resposta JSON usando JSONPath, que é uma 
+linguagem para acessar partes específicas de documentos JSON.
+
+   - `jsonPath("$[0].nome").isEqualTo("Daniel")`: Isso verifica se o campo "nome" do primeiro elemento da matriz JSON é igual a "Daniel".
+
+   - `jsonPath("$[0].sobrenome").isEqualTo("Penelva")`: Isso verifica se o campo "sobrenome" do primeiro elemento da matriz JSON é igual a "Penelva".
+
+   - `jsonPath("$[0].email").isEqualTo("d4n.andrade@gmail.com")`: Isso verifica se o campo "email" do primeiro elemento da matriz JSON é igual 
+      a "d4n.andrade@gmail.com".
+
+   - `jsonPath("$").isArray()`: Isso verifica se o corpo da resposta é uma matriz JSON.
+
+   - `jsonPath("$").value(hasSize(1))`: Isso verifica se a matriz JSON tem um tamanho (quantidade de elementos) de 1.
+
+Este teste verifica se a listagem de empregados por meio do endpoint "/api/empregados" usando o `WebTestClient` funciona conforme o esperado. 
+Ele valida o código de status, o tipo de mídia da resposta, os valores dos campos do primeiro empregado na resposta JSON, verifica se a resposta 
+é uma matriz JSON e verifica o tamanho da matriz JSON. É um exemplo de teste de integração que verifica a funcionalidade de listar todos os 
+empregados em um serviço REST em um aplicativo Spring Boot.
