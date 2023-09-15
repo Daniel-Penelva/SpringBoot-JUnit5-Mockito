@@ -1202,3 +1202,36 @@ resposta possui um código de status `HttpStatus.NOT_FOUND`, indicando que o emp
 
 Este teste verifica a funcionalidade de exclusão de empregados por meio do endpoint "/api/empregados/{id}" e também valida o comportamento 
 quando um empregado não existe mais após a exclusão. 
+
+----------------------------------------------------------------------- // -----------------------------------------------------------------------
+
+Explicando o método de teste de integração -> testCriarEmpregado()
+
+1. **Dado (given)**: Nesta seção, configura o estado inicial para o teste.
+
+   - Cria um objeto `Empregado` usando o padrão de construtor Builder. O objeto `empregado` tem um ID de 1, um nome "Daniel", um sobrenome 
+     "Penelva" e um endereço de e-mail "d4n.andrade@gmail.com".
+
+2. **Quando (when)**: Aqui, executa a ação que deseja testar.
+
+   - Envia uma solicitação HTTP POST usando o `WebTestClient`. A URI é definida como "http://localhost:8080/api/empregados", e o corpo da 
+     solicitação contém o objeto `empregado`. Isso simula a criação de um empregado no servidor.
+
+3. **Então (then)**: Nesta seção, verifica os resultados ou o comportamento esperado após a ação.
+
+   - Aqui, usa `expectStatus().isCreated()` para verificar se o código de status da resposta é `HttpStatus.CREATED` (HTTP 201), o que significa 
+     que a solicitação de criação foi bem-sucedida.
+
+   - VAqui, usa `expectHeader().contentType(MediaType.APPLICATION_JSON)` para verificar se o cabeçalho de tipo de mídia (Content-Type) da 
+     resposta é `MediaType.APPLICATION_JSON`, o que indica que a resposta é em formato JSON.
+
+   - Aqui usa `expectBody()` para verificar o corpo da resposta JSON usando JSONPath.
+
+   - Usando `jsonPath("$.id").isEqualTo(empregado.getId())`, aqui verifica se o campo "id" do empregado criado na resposta corresponde ao ID do 
+     empregado que você enviou na solicitação.
+
+   - Da mesma forma, verifica os outros campos do empregado, como nome, sobrenome e email.
+
+Este teste verifica se a criação de um empregado por meio do endpoint "/api/empregados" usando o `WebTestClient` funciona conforme o esperado, 
+incluindo a validação do código de status, tipo de mídia da resposta e os campos do empregado criado. É um exemplo de teste de integração usando 
+o `WebTestClient` em um aplicativo Spring Boot.
