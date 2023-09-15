@@ -56,7 +56,7 @@ public class EmpregadoControllerWebTestClientTests {
     @Order(2)
     void testBsucarEmpregadoPorId() {
     
-      // Envie uma solicitação HTTP GET para obter um empregado pelo ID 1
+      // Envie uma solicitação HTTP GET para obter um empregado pelo ID 1 (.exchange() - envia o request)
       webTestClient.get().uri("http://localhost:8080/api/empregados/1").exchange()
             .expectStatus().isOk() // Verifique o código de status da resposta
             .expectHeader().contentType(MediaType.APPLICATION_JSON) // Verifique o cabeçalho de tipo de mídia (Content-Type) da resposta
@@ -98,5 +98,24 @@ public class EmpregadoControllerWebTestClientTests {
                 Assertions.assertNotNull(empregados);  // Verifique se a lista de empregados não é nula
             });
     }
-    
+
+    @Test
+    @Order(5)
+    void testAtualizarEmpregado() {
+
+        // Criar um objeto Empregado com os dados atualizados
+        Empregado empregadoAtualizado = Empregado.builder()
+                .id(1L)
+                .nome("Daniel")
+                .sobrenome("Penelva")
+                .email("d4n.andrade@gmail.com").build();
+
+         // Enviar uma solicitação HTTP PUT para atualizar o empregado com ID 1
+         webTestClient.put().uri("http://localhost:8080/api/empregados/1")
+                .contentType(MediaType.APPLICATION_JSON)  // Definir o tipo de mídia como JSON
+                .bodyValue(empregadoAtualizado)  // Enviar o objeto empregadoAtualizado no corpo da solicitação
+                .exchange()  // Executar a solicitação
+                .expectStatus().isOk()  // Verificar o código de status da resposta
+                .expectHeader().contentType(MediaType.APPLICATION_JSON);  // Verificar o cabeçalho de tipo de mídia (Content-Type) da resposta
+    }
 }

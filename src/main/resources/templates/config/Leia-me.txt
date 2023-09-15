@@ -1327,3 +1327,29 @@ Este teste verifica se a listagem de empregados por meio do endpoint "/api/empre
 Ele valida o código de status, o tipo de mídia da resposta, a capacidade de desserializar a resposta em uma lista de objetos `Empregado` e 
 verifica se a lista de empregados não é nula e tem o tamanho esperado. É um exemplo de teste de integração que verifica a funcionalidade de 
 listar todos os empregados em um serviço REST em um aplicativo Spring Boot.
+
+-------------------- // --------------------
+
+Explicando o método de teste de integração -> testAtualizarEmpregado()
+
+1. **Criação do Objeto Empregado Atualizado**: Um objeto `Empregado` chamado `empregadoAtualizado` é criado com os dados que você deseja 
+atualizar. Neste caso, o empregado tem ID 1 e dados atualizados de nome, sobrenome e email.
+
+2. **Envio da Solicitação HTTP PUT**: É feita uma solicitação HTTP PUT para o endpoint "http://localhost:8080/api/empregados/1", que é 
+responsável por atualizar o empregado com ID 1. O corpo da solicitação contém o objeto `empregadoAtualizado`, que será usado para atualizar o 
+empregado existente.
+
+3. **Configuração do Tipo de Mídia**: O cabeçalho de tipo de mídia (Content-Type) da solicitação é configurado como "application/json" para 
+indicar que o corpo da solicitação contém dados JSON.
+
+4. **Execução da Solicitação**: A solicitação é efetivamente executada usando o método `.exchange()`.
+
+5. **Verificação do Código de Status**: Após a execução da solicitação, é verificado se o código de status da resposta é HTTP 200 (OK) usando 
+`.expectStatus().isOk()`. Isso verifica se a atualização foi bem-sucedida.
+
+6. **Verificação do Cabeçalho de Tipo de Mídia**: É verificado se o cabeçalho de tipo de mídia (Content-Type) da resposta é 
+"application/json" usando `.expectHeader().contentType(MediaType.APPLICATION_JSON)`. Isso garante que a resposta seja no formato JSON.
+
+No geral, este teste garante que a atualização de um empregado com dados atualizados seja tratada corretamente pelo endpoint 
+"/api/empregados/{id}" usando o método HTTP PUT. Isso é típico de testes de integração que validam a funcionalidade de APIs RESTful em um 
+aplicativo Spring Boot.
