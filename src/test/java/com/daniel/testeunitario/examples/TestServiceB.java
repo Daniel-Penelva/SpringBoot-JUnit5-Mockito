@@ -1,4 +1,4 @@
-package com.daniel.testeunitario;
+package com.daniel.testeunitario.examples;
 
 import org.junit.Assert;
 import org.junit.Test;

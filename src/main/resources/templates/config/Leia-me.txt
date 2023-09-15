@@ -1043,3 +1043,86 @@ Em resumo, este teste de unidade verifica se o endpoint "/api/empregados/{id}" e
 corretamente. Ele configura um cenário em que o serviço não realiza nenhuma ação real de exclusão, mas apenas retorna um código de status HTTP 
 200 OK para indicar que a solicitação foi bem-sucedida. Esse tipo de teste pode ser útil quando você deseja testar apenas a camada de controle 
 do seu aplicativo sem se preocupar com a lógica de negócios real de exclusão no serviço.
+
+----------------------------------------------------------------------- // -----------------------------------------------------------------------
+
+Classe TestRestTemplate
+
+A `TestRestTemplate` é uma classe fornecida pelo Spring Framework que faz parte do módulo Spring Test. Ela é usada para testar serviços RESTful 
+em um aplicativo Spring durante testes de integração. A principal funcionalidade da `TestRestTemplate` é permitir que você realize chamadas 
+HTTP (por exemplo, GET, POST, PUT, DELETE) para seus endpoints REST e verifique as respostas dentro dos testes de integração.
+
+Aqui estão algumas características e informações importantes sobre a classe `TestRestTemplate`:
+
+1. **Integração com o Ambiente Spring**: A `TestRestTemplate` é projetada para funcionar perfeitamente com o ambiente de teste Spring, 
+permitindo que você injete dependências gerenciadas pelo Spring, como controladores e serviços, diretamente nos seus testes.
+
+2. **Gerenciamento Automático do Ciclo de Vida do Aplicativo**: O Spring Test Framework cuida do ciclo de vida do aplicativo durante os testes, 
+iniciando e encerrando o contexto do Spring conforme necessário. Isso facilita a configuração de um ambiente de teste realista.
+
+3. **Configuração Simples**: Configurar uma instância de `TestRestTemplate` é simples. Você pode simplesmente injetá-la em seus testes e começar a usá-la. O Spring Boot geralmente cria automaticamente uma instância de `TestRestTemplate` configurada para você, a menos que você queira personalizá-la.
+
+4. **Suporte a Autenticação**: A `TestRestTemplate` oferece suporte à autenticação, permitindo que você configure credenciais, como tokens de 
+autenticação ou informações de autenticação básica, ao fazer solicitações HTTP para endpoints protegidos.
+
+5. **Manuseio Automático de Serialização e Desserialização**: Ela lida automaticamente com a serialização de objetos Java em formatos como JSON 
+ao enviar solicitações e com a desserialização de respostas JSON em objetos Java.
+
+Aqui está um exemplo de uso básico da `TestRestTemplate` em um teste de integração Spring Boot:
+
+```java
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+@SpringJUnitConfig
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+public class MyIntegrationTest {
+
+    @Autowired
+    private TestRestTemplate testRestTemplate;
+
+    @Test
+    void testGetEndpoint() {
+        ResponseEntity<String> response = testRestTemplate.getForEntity("/api/resource", String.class);
+        assertEquals(200, response.getStatusCodeValue());
+        assertEquals("Hello, World!", response.getBody());
+    }
+}
+```
+
+Neste exemplo, o teste de integração injeta uma instância de `TestRestTemplate` e a usa para fazer uma solicitação GET para o endpoint 
+"/api/resource". Em seguida, ele verifica o código de status e o corpo da resposta.
+
+A `TestRestTemplate` é uma ferramenta poderosa para testar serviços REST em aplicativos Spring, pois permite que você interaja com seus 
+endpoints da mesma forma que um cliente real faria, facilitando a validação do comportamento do seu aplicativo.
+
+-------------------- // --------------------
+
+Explicando o método de teste de integração -> testCriarEmpregado()
+
+1. Começa criando um objeto `Empregado` usando o padrão de construtor Builder. O objeto `empregado` tem um ID de 1, um nome "Daniel", um 
+sobrenome "Penelva" e um endereço de e-mail "d4n.andrade@gmail.com".
+
+2. Em seguida, usa `testRestTemplate.postForEntity()` para enviar uma solicitação HTTP POST para o endpoint "http://localhost:8080/api/empregados" 
+com o objeto `empregado` como corpo da solicitação. Isso simula a criação de um empregado no servidor.
+
+3. Verifica o código de status da resposta usando `assertEquals()`. Neste caso, espera-se que o código de status seja `HttpStatus.CREATED` 
+(HTTP 201), o que significa que a solicitação de criação foi bem-sucedida.
+
+4. Verifica o tipo de mídia (Content-Type) da resposta usando `assertEquals()`. Espera-se que seja `MediaType.APPLICATION_JSON`, que indica 
+que a resposta vai ser JSON.
+
+5. Obtém o objeto `Empregado` criado a partir do corpo da resposta usando `resposta.getBody()`.
+
+6. Verifica se o objeto `empregadoCriado` não é nulo usando `assertNotNull()`, garantindo que a criação do empregado tenha sido bem-sucedida e 
+que um objeto válido tenha sido retornado.
+
+7. Finalmente, verifica os campos do `empregadoCriado` usando `assertEquals()`, comparando os valores esperados com os valores reais.
+
+No geral, este teste verifica se a criação de um empregado por meio do endpoint "/api/empregados" funciona conforme o esperado, incluindo a 
+validação do código de status, tipo de mídia da resposta e os campos do empregado criado. 
