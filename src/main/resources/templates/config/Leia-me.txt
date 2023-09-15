@@ -1174,3 +1174,31 @@ que um objeto válido tenha sido retornado.
 No geral, este teste verifica se a obtenção de um empregado por meio do endpoint "/api/empregados/{id}" (onde `{id}` é substituído pelo ID do 
 empregado, neste caso, 1) funciona conforme o esperado. Ele valida o código de status da resposta, o tipo de mídia e os campos do empregado 
 obtido. 
+
+-------------------- // --------------------
+
+Explicando o método de teste de integração -> testDeletarEmpregados()
+
+1. Começa enviando uma solicitação HTTP GET para listar todos os empregados usando `testRestTemplate.getForEntity()`. A resposta é convertida 
+em uma lista de `Empregado`.
+
+2. Verifica se inicialmente há um empregado na lista usando `assertEquals()`. Neste caso, espera-se que haja um empregado na lista.
+
+3. Cria um mapa de variáveis de caminho (`pathVariables`) com o ID do empregado a ser excluído. Neste caso, está configurando o ID como 1.
+
+4. Envia uma solicitação HTTP DELETE para excluir o empregado pelo ID usando `testRestTemplate.exchange()`. Isso simula a exclusão de um 
+empregado no servidor.
+
+5. Verifica o código de status da resposta após a exclusão bem-sucedida usando `assertEquals()`. Espera-se que o código de status seja 
+`HttpStatus.OK`, indicando que a exclusão foi bem-sucedida.
+
+6. Verifica se a resposta não possui um corpo usando `assertFalse()`, uma vez que uma resposta DELETE bem-sucedida não possui um corpo.
+
+7. Em seguida, envia uma nova solicitação HTTP GET para listar todos os empregados novamente e verifica se a lista de empregados está vazia, já 
+que foi excluido o único empregado que estava na lista.
+
+8. Por fim, envia uma solicitação HTTP GET para obter detalhes do empregado com o ID 2 (que não existe mais após a exclusão) e verifica que a 
+resposta possui um código de status `HttpStatus.NOT_FOUND`, indicando que o empregado não foi encontrado, e não possui um corpo.
+
+Este teste verifica a funcionalidade de exclusão de empregados por meio do endpoint "/api/empregados/{id}" e também valida o comportamento 
+quando um empregado não existe mais após a exclusão. 

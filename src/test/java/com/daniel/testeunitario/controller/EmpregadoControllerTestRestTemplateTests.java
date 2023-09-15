@@ -1,5 +1,14 @@
 package com.daniel.testeunitario.controller;
 
+import static org.junit.Assert.assertFalse;
+// Adicionando import static
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
@@ -8,15 +17,10 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-
-// Adicionando import static
-import static org.junit.jupiter.api.Assertions.*;
-
-import java.util.Arrays;
-import java.util.List;
 
 import com.daniel.testeunitario.model.Empregado;
 
@@ -111,6 +115,52 @@ public class EmpregadoControllerTestRestTemplateTests {
         assertEquals("Daniel", empregado.getNome());
         assertEquals("Penelva", empregado.getSobrenome());
         assertEquals("d4n.andrade@gmail.com", empregado.getEmail());
+    }
+
+    @Test
+    @Order(4)
+    void testDeletarEmpregados() {
+
+        // Enviar uma solicitação HTTP GET para listar todos os empregados
+         ResponseEntity<Empregado[]> resposta = testRestTemplate.getForEntity("http://localhost:8080/api/empregados", Empregado[].class);
+
+         // Converter o corpo da resposta em uma lista de Empregados
+        List<Empregado> empregados = Arrays.asList(resposta.getBody());
+
+        // Verificar se há inicialmente um empregado na lista
+        assertEquals(1, empregados.size());
+
+        // Criar um mapa de variáveis de caminho com o ID do empregado a ser excluído
+        Map<String, Long> pathVariables = new HashMap<>();
+        pathVariables.put("id", 1L);
+
+        // Enviar uma solicitação HTTP DELETE para excluir o empregado pelo ID
+        ResponseEntity<Void> exchange = testRestTemplate
+            .exchange("http://localhost:8080/api/empregados/{id}", HttpMethod.DELETE, null, Void.class, pathVariables);
+
+        // Verificar o código de status da resposta após a exclusão bem-sucedida
+        assertEquals(HttpStatus.OK, exchange.getStatusCode());
+
+        // Verificar se a resposta não possui um corpo
+        assertFalse(exchange.hasBody());
+
+        // Enviar uma nova solicitação HTTP GET para listar todos os empregados após a exclusão
+        resposta = testRestTemplate.getForEntity("http://localhost:8080/api/empregados", Empregado[].class);
+
+        // Converter o corpo da resposta em uma lista de Empregados novamente
+        empregados = Arrays.asList(resposta.getBody());
+
+        // Verificar se a lista de empregados está vazia após a exclusão
+        assertEquals(0, empregados.size());
+
+        // Enviar uma solicitação HTTP GET para obter detalhes do empregado excluído (ID 2, que não existe mais)
+        ResponseEntity<Empregado> respostaDetalhe = testRestTemplate.getForEntity("http://localhost:8080/api/empregados/2", Empregado.class);
+
+        // Verificar o código de status da resposta após tentar obter detalhes do empregado excluído
+        assertEquals(HttpStatus.NOT_FOUND, respostaDetalhe.getStatusCode());
+
+        // Verificar se a resposta não possui um corpo
+        assertFalse(respostaDetalhe.hasBody());
     }
 
 }
