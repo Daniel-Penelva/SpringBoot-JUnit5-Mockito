@@ -835,3 +835,83 @@ Em resumo, este teste de unidade verifica se o endpoint "/api/empregados/{id}" e
 empregado não é encontrado com base em um ID. Ele configura um cenário em que o serviço retorna um `Optional` vazio para simular que o empregado 
 não foi encontrado e, em seguida, verifica se a resposta tem o status HTTP esperado (404 Not Found). Isso é útil para garantir que a 
 funcionalidade de busca de empregado por ID trate adequadamente os casos em que o empregado não existe.
+
+-------------------- // --------------------
+
+Explicando o método de teste -> testAtualizarEmpregadoPorId()
+
+Este script é um exemplo de um método de teste de unidade que verifica o comportamento de um endpoint para atualizar um empregado por ID em um 
+aplicativo Spring Boot usando o framework Spring MVC e Mockito para simular o serviço. Vou explicar passo a passo o que está acontecendo neste 
+método de teste:
+
+```java
+void testAtualizarEmpregadoPorId() throws Exception {
+    // given
+    Empregado empregado = criarEmpregado();
+
+    Empregado empregadoAtualizado = Empregado.builder()
+            .id(1L)
+            .nome("Daniel Up")
+            .sobrenome("Penelva Up")
+            .email("d4n.andrade@gmail.com").build();
+```
+
+Nesta seção, o teste está configurando o cenário (given) para o teste. Ele cria dois objetos `Empregado`: `empregado` e `empregadoAtualizado`. 
+O `empregado` é criado usando um método `criarEmpregado()` (que provavelmente é definido em algum lugar no código de teste) e representa o estado 
+atual do empregado. O `empregadoAtualizado` representa o estado atualizado do empregado, com informações diferentes.
+
+```java
+    given(empregadoServiceMock.getEmpregadoById(empregado.getId())).willReturn(Optional.of(empregado));
+
+    given(empregadoServiceMock.updateEmpregado(any(Empregado.class))).willAnswer((invocation) -> invocation.getArgument(0));
+```
+
+Nesta parte, o teste configura comportamentos simulados para o serviço `empregadoServiceMock`. 
+
+- O primeiro `given()` indica que quando o método `getEmpregadoById()` do serviço for chamado com o ID do `empregado`, ele deve retornar um 
+  `Optional` contendo o objeto `empregado`. Isso simula o comportamento de buscar um empregado pelo ID.
+
+- O segundo `given()` indica que quando o método `updateEmpregado()` do serviço for chamado com qualquer instância de `Empregado`, ele deve 
+  retornar exatamente a mesma instância de `Empregado` que foi passada como argumento. Isso simula o comportamento de atualizar um empregado e 
+  retornar o empregado atualizado.
+
+```java
+    // when
+    ResultActions response = mockMvc.perform(put("/api/empregados/{id}", empregado.getId())
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(empregadoAtualizado)));
+```
+
+Nesta parte, o teste executa a ação que está sendo testada (when). Ele usa o objeto `mockMvc` para simular uma solicitação PUT para o endpoint 
+"/api/empregados/{id}", onde `{id}` é substituído pelo ID do `empregado` que está sendo atualizado. O corpo da solicitação contém os dados do 
+`empregadoAtualizado` em formato JSON.
+
+```java
+    // then
+    response.andExpect(status().isOk())
+            .andDo(print())
+            .andExpect(jsonPath("$.nome", is(empregadoAtualizado.getNome())))
+            .andExpect(jsonPath("$.sobrenome", is(empregadoAtualizado.getSobrenome())))
+            .andExpect(jsonPath("$.email", is(empregadoAtualizado.getEmail())));;
+```
+
+Na seção "then" do teste, ele verifica o resultado da solicitação que foi enviada:
+
+- `response.andExpect(status().isOk())`: Isso verifica se a resposta tem um status HTTP "200 OK", indicando que a solicitação foi bem-sucedida.
+
+- `response.andDo(print())`: Isso adiciona um manipulador de resultados para imprimir informações de resultado no console, o que é útil para 
+   depuração e diagnóstico.
+
+- `response.andExpect(jsonPath("$.nome", is(empregadoAtualizado.getNome())))`: Isso verifica se o campo "nome" no corpo da resposta JSON 
+   corresponde ao nome do `empregadoAtualizado`.
+
+- `response.andExpect(jsonPath("$.sobrenome", is(empregadoAtualizado.getSobrenome())))`: Isso verifica se o campo "sobrenome" no corpo da 
+   resposta JSON corresponde ao sobrenome do `empregadoAtualizado`.
+
+- `response.andExpect(jsonPath("$.email", is(empregadoAtualizado.getEmail())))`: Isso verifica se o campo "email" no corpo da resposta JSON 
+   corresponde ao email do `empregadoAtualizado`.
+
+Em resumo, este teste de unidade verifica se o endpoint "/api/empregados/{id}" em seu aplicativo Spring Boot está atualizando um empregado por 
+ID corretamente. Ele configura um cenário com um empregado fictício, simula uma solicitação PUT para o endpoint com dados de empregado atualizados
+e verifica se a resposta tem o status HTTP esperado e se os dados do empregado no corpo da resposta correspondem aos dados do empregado 
+atualizado. Isso é útil para garantir que a funcionalidade de atualização de empregado por ID esteja funcionando conforme o esperado.

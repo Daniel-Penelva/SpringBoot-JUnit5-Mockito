@@ -142,4 +142,34 @@ public class EmpregadoControllerTest {
         .andDo(print());
     }
 
+    @DisplayName("Teste para atualizar empregado por id")
+    @Test
+    void testAtualizarEmpregadoPorId() throws Exception {
+
+        // given
+        Empregado empregado = criarEmpregado();
+
+        Empregado empregadoAtualizado = Empregado.builder()
+                .id(1L)
+                .nome("Daniel Up")
+                .sobrenome("Penelva Up")
+                .email("d4n.andrade@gmail.com").build();
+
+        given(empregadoServiceMock.getEmpregadoById(empregado.getId())).willReturn(Optional.of(empregado));
+
+        given(empregadoServiceMock.updateEmpregado(any(Empregado.class))).willAnswer((invocation) -> invocation.getArgument(0));
+
+        // when
+        ResultActions response = mockMvc.perform(put("/api/empregados/{id}", empregado.getId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(empregadoAtualizado)));
+
+        //then
+        response.andExpect(status().isOk())
+                .andDo(print())
+                .andExpect(jsonPath("$.nome", is(empregadoAtualizado.getNome())))
+                .andExpect(jsonPath("$.sobrenome", is(empregadoAtualizado.getSobrenome())))
+                .andExpect(jsonPath("$.email", is(empregadoAtualizado.getEmail())));;
+    }
+
 }
