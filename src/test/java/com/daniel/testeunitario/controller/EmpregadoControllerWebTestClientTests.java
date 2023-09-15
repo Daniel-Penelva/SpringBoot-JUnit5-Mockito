@@ -1,5 +1,6 @@
 package com.daniel.testeunitario.controller;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -9,8 +10,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
-// Adicionando imports static
-import static org.springframework.boot.test.context.SpringBootTest.*;
+import java.util.List;
+
 import static org.hamcrest.Matchers.*;
 
 import com.daniel.testeunitario.model.Empregado;
@@ -80,6 +81,22 @@ public class EmpregadoControllerWebTestClientTests {
             .jsonPath("$[0].email").isEqualTo("d4n.andrade@gmail.com")  // Verifique o campo "email" do primeiro elemento da matriz JSON
             .jsonPath("$").isArray()   // Verifique se a resposta é uma matriz JSON
             .jsonPath("$").value(hasSize(1));  // Verifique o tamanho da matriz JSON (quantidade de elementos)
+    }
+
+    @Test
+    @Order(4)
+    void testObterListarEmpregado() {
+    
+     // Envie uma solicitação HTTP GET para listar todos os empregados
+      webTestClient.get().uri("http://localhost:8080/api/empregados").exchange()   
+            .expectStatus().isOk()  // Verifique o código de status da resposta
+            .expectHeader().contentType(MediaType.APPLICATION_JSON)  // Verifique o cabeçalho de tipo de mídia (Content-Type) da resposta
+            .expectBodyList(Empregado.class)  // Verifique o corpo da resposta JSON como uma lista de objetos Empregado
+            .consumeWith(response -> {  // Consuma a resposta e realize verificações adicionais
+                List<Empregado> empregados = response.getResponseBody();
+                Assertions.assertEquals(1, empregados.size());   // Verifique se a lista de empregados possui tamanho igual a 1
+                Assertions.assertNotNull(empregados);  // Verifique se a lista de empregados não é nula
+            });
     }
     
 }

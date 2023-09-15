@@ -1298,3 +1298,32 @@ Este teste verifica se a listagem de empregados por meio do endpoint "/api/empre
 Ele valida o código de status, o tipo de mídia da resposta, os valores dos campos do primeiro empregado na resposta JSON, verifica se a resposta 
 é uma matriz JSON e verifica o tamanho da matriz JSON. É um exemplo de teste de integração que verifica a funcionalidade de listar todos os 
 empregados em um serviço REST em um aplicativo Spring Boot.
+
+-------------------- // --------------------
+
+Explicando o método de teste de integração -> testObterListarEmpregado()
+
+1. **Envio da Solicitação GET**: Começa enviando uma solicitação HTTP GET para listar todos os empregados usando `webTestClient.get().uri()`. 
+Isso simula a solicitação para listar todos os empregados.
+
+2. **Verificação do Código de Status**: Verifica o código de status da resposta usando `expectStatus().isOk()`. Isso garante que a resposta 
+tenha um código de status HTTP 200 (OK), indicando que a solicitação foi bem-sucedida.
+
+3. **Verificação do Tipo de Mídia**: Verifica o cabeçalho de tipo de mídia (Content-Type) da resposta usando 
+`expectHeader().contentType(MediaType.APPLICATION_JSON)`. Isso garante que a resposta seja no formato JSON.
+
+4. **Verificação do Corpo da Resposta JSON como Lista de Empregado**: Aqui, usa `expectBodyList(Empregado.class)` para verificar se o corpo da 
+resposta JSON pode ser desserializado em uma lista de objetos `Empregado`. Isso garante que a resposta seja uma lista de empregados em JSON.
+
+5. **Consumir a Resposta e Realizar Verificações Adicionais**: Aqui, usa `consumeWith()` para consumir a resposta e realizar verificações 
+adicionais. No lambda passado para `consumeWith()`, você obtém a lista de empregados da resposta usando `response.getResponseBody()` e, em 
+seguida, faz duas verificações adicionais:
+
+   - `Assertions.assertNotNull(empregados)`: Isso verifica se a lista de empregados não é nula.
+
+   - `Assertions.assertEquals(1, empregados.size())`: Isso verifica se a lista de empregados tem um tamanho igual a 1.
+
+Este teste verifica se a listagem de empregados por meio do endpoint "/api/empregados" usando o `WebTestClient` funciona conforme o esperado. 
+Ele valida o código de status, o tipo de mídia da resposta, a capacidade de desserializar a resposta em uma lista de objetos `Empregado` e 
+verifica se a lista de empregados não é nula e tem o tamanho esperado. É um exemplo de teste de integração que verifica a funcionalidade de 
+listar todos os empregados em um serviço REST em um aplicativo Spring Boot.
