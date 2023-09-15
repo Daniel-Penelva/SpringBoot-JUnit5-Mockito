@@ -15,6 +15,9 @@ import org.springframework.http.ResponseEntity;
 // Adicionando import static
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.Arrays;
+import java.util.List;
+
 import com.daniel.testeunitario.model.Empregado;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -55,6 +58,32 @@ public class EmpregadoControllerTestRestTemplateTests {
         assertEquals("Daniel", empregadoCriado.getNome());
         assertEquals("Penelva", empregadoCriado.getSobrenome());
         assertEquals("d4n.andrade@gmail.com", empregadoCriado.getEmail());
+    }
+
+    @Test
+    @Order(2)
+    void testListarEmpregados() {
+        
+        // Enviar uma solicitação HTTP GET para listar todos os empregados
+        ResponseEntity<Empregado[]> resposta = testRestTemplate.getForEntity("http://localhost:8080/api/empregados", Empregado[].class);
+
+        // Converter o corpo da resposta em uma lista de Empregados
+        List<Empregado> empregados = Arrays.asList(resposta.getBody());
+
+        // Verificar o código de status da resposta
+        assertEquals(HttpStatus.OK, resposta.getStatusCode());
+
+        // Verificar o tipo de mídia (Content-Type) da resposta
+        assertEquals(MediaType.APPLICATION_JSON, resposta.getHeaders().getContentType());
+
+        // Verificar o tamanho da lista de empregados
+        assertEquals(1, empregados.size());
+
+        // Verificar os campos do primeiro empregado na lista
+        assertEquals(1L,empregados.get(0).getId());
+        assertEquals("Daniel", empregados.get(0).getNome());
+        assertEquals("Penelva", empregados.get(0).getSobrenome());
+        assertEquals("d4n.andrade@gmail.com", empregados.get(0).getEmail());
     }
 
 }

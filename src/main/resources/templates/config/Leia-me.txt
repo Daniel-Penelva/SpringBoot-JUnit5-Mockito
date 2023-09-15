@@ -1126,3 +1126,27 @@ que um objeto válido tenha sido retornado.
 
 No geral, este teste verifica se a criação de um empregado por meio do endpoint "/api/empregados" funciona conforme o esperado, incluindo a 
 validação do código de status, tipo de mídia da resposta e os campos do empregado criado. 
+
+-------------------- // --------------------
+
+Explicando o método de teste de integração -> testListarEmpregados()
+
+1. Começa enviando uma solicitação HTTP GET para o endpoint "http://localhost:8080/api/empregados" usando `testRestTemplate.getForEntity()`. A 
+resposta é esperada como uma matriz de objetos `Empregado` (`Empregado[]`).
+
+2. Converte o corpo da resposta em uma lista de `Empregado` usando `Arrays.asList(resposta.getBody())`. 
+
+3. Verifica o código de status da resposta usando `assertEquals()`. Neste caso, espera-se que o código de status seja `HttpStatus.OK` (HTTP 200), 
+o que significa que a solicitação de listagem de empregados foi bem-sucedida.
+
+4. Verifica o tipo de mídia (Content-Type) da resposta usando `assertEquals()`. Espera-se que seja `MediaType.APPLICATION_JSON`, o que indica 
+que a resposta é em formato JSON.
+
+5. Verifica o tamanho da lista de empregados usando `assertEquals()`. Neste caso, espera-se que haja apenas um empregado na lista, portanto, o 
+tamanho da lista deve ser igual a 1.
+
+6. Verifica os campos do primeiro empregado na lista, acessando-o através de `empregados.get(0)` e usando `assertEquals()` para comparar os 
+valores esperados com os valores reais.
+
+No geral, este teste verifica se a listagem de empregados por meio do endpoint "/api/empregados" retorna um empregado com os valores esperados. 
+É um exemplo de teste de integração que valida a funcionalidade de listagem de recursos em um serviço REST em um aplicativo Spring Boot.
