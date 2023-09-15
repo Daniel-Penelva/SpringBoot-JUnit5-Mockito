@@ -1353,3 +1353,24 @@ indicar que o corpo da solicitação contém dados JSON.
 No geral, este teste garante que a atualização de um empregado com dados atualizados seja tratada corretamente pelo endpoint 
 "/api/empregados/{id}" usando o método HTTP PUT. Isso é típico de testes de integração que validam a funcionalidade de APIs RESTful em um 
 aplicativo Spring Boot.
+
+-------------------- // --------------------
+
+Explicando o método de teste de integração -> testDeletarEmpregado()
+
+1. **Verificação Inicial**: Primeiro, ele verifica se o empregado com ID 1 existe. Isso é feito enviando uma solicitação GET para o endpoint 
+"http://localhost:8080/api/empregados/1". O código verifica se a resposta tem status HTTP 200 (OK), se o cabeçalho de tipo de mídia é JSON e se 
+a resposta pode ser convertida em uma lista de objetos `Empregado` com um tamanho de 1 (ou seja, espera-se que um empregado seja encontrado).
+
+2. **Exclusão do Empregado**: Em seguida, ele envia uma solicitação HTTP DELETE para excluir o empregado com ID 1. O código verifica se a 
+resposta tem status HTTP 200 (OK), o que indica que a exclusão foi bem-sucedida.
+
+3. **Verificação Pós-Exclusão**: Após a exclusão, ele verifica se não há mais empregados. Isso é feito novamente enviando uma solicitação GET 
+para o endpoint de listagem de empregados. A expectativa é que a lista esteja vazia, então o código verifica se a lista de empregados tem 
+tamanho 0.
+
+4. **Tentativa de Buscar o Empregado Excluído**: Por fim, o código tenta buscar o empregado com ID 1 novamente. No entanto, como o empregado 
+foi excluído, isso deve resultar em um erro 4xx (por exemplo, 404 - Not Found), pois o empregado não existe mais.
+
+Este teste verifica se a funcionalidade de exclusão de empregados está funcionando corretamente e se os endpoints HTTP GET e DELETE estão 
+lidando adequadamente com a criação e exclusão de empregados no aplicativo Spring Boot.
