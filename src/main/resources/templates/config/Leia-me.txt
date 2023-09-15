@@ -1150,3 +1150,27 @@ valores esperados com os valores reais.
 
 No geral, este teste verifica se a listagem de empregados por meio do endpoint "/api/empregados" retorna um empregado com os valores esperados. 
 É um exemplo de teste de integração que valida a funcionalidade de listagem de recursos em um serviço REST em um aplicativo Spring Boot.
+
+-------------------- // --------------------
+
+Explicando o método de teste de integração -> testObterEmpregadosPorId()
+
+1. Começa enviando uma solicitação HTTP GET para o endpoint "http://localhost:8080/api/empregados/1" usando 
+`testRestTemplate.getForEntity()`. Isso solicita um empregado específico com o ID 1 e espera receber um objeto `Empregado` como resposta.
+
+2. Obtém o empregado a partir do corpo da resposta usando `resposta.getBody()`.
+
+3. Verifica o código de status da resposta usando `assertEquals()`. Neste caso, espera-se que o código de status seja `HttpStatus.OK` 
+(HTTP 200), o que significa que a solicitação de obtenção de empregado foi bem-sucedida.
+
+4. Verifica o tipo de mídia (Content-Type) da resposta usando `assertEquals()`. Espera-se que seja `MediaType.APPLICATION_JSON`, o que 
+indica que a resposta é em formato JSON.
+
+5. Verifica se o objeto `empregado` não é nulo usando `assertNotNull()`, garantindo que a obtenção do empregado tenha sido bem-sucedida e 
+que um objeto válido tenha sido retornado.
+
+6. Verifica os campos do empregado obtido usando `assertEquals()`, comparando os valores esperados com os valores reais.
+
+No geral, este teste verifica se a obtenção de um empregado por meio do endpoint "/api/empregados/{id}" (onde `{id}` é substituído pelo ID do 
+empregado, neste caso, 1) funciona conforme o esperado. Ele valida o código de status da resposta, o tipo de mídia e os campos do empregado 
+obtido. 

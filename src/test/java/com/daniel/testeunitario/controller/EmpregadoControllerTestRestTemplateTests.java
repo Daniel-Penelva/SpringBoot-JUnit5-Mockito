@@ -86,4 +86,31 @@ public class EmpregadoControllerTestRestTemplateTests {
         assertEquals("d4n.andrade@gmail.com", empregados.get(0).getEmail());
     }
 
+
+    @Test
+    @Order(3)
+    void testObterEmpregadosPorId() {
+        
+        // Enviar uma solicitação HTTP GET para obter um empregado pelo ID 1
+        ResponseEntity<Empregado> resposta = testRestTemplate.getForEntity("http://localhost:8080/api/empregados/1", Empregado.class);
+
+        // Obter o empregado a partir do corpo da resposta
+        Empregado empregado = resposta.getBody();
+
+        // Verificar o código de status da resposta
+        assertEquals(HttpStatus.OK, resposta.getStatusCode());
+
+        // Verificar o tipo de mídia (Content-Type) da resposta
+        assertEquals(MediaType.APPLICATION_JSON, resposta.getHeaders().getContentType());
+
+        // Verificar se o objeto empregado não é nulo
+        assertNotNull(empregado);
+
+        // Verificar os campos do empregado obtido
+        assertEquals(1L,empregado.getId());
+        assertEquals("Daniel", empregado.getNome());
+        assertEquals("Penelva", empregado.getSobrenome());
+        assertEquals("d4n.andrade@gmail.com", empregado.getEmail());
+    }
+
 }
