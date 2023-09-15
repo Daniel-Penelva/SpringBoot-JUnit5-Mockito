@@ -1235,3 +1235,34 @@ Explicando o método de teste de integração -> testCriarEmpregado()
 Este teste verifica se a criação de um empregado por meio do endpoint "/api/empregados" usando o `WebTestClient` funciona conforme o esperado, 
 incluindo a validação do código de status, tipo de mídia da resposta e os campos do empregado criado. É um exemplo de teste de integração usando 
 o `WebTestClient` em um aplicativo Spring Boot.
+
+-------------------- // --------------------
+
+Explicando o método de teste de integração -> testBsucarEmpregadoPorId()
+
+1. **Envio da Solicitação GET**: Começa enviando uma solicitação HTTP GET para obter um empregado pelo ID 1 usando `webTestClient.get().uri()`. 
+Isso simula a solicitação para buscar um empregado pelo ID.
+
+2. **Verificação do Código de Status**: Verifica o código de status da resposta usando `expectStatus().isOk()`. Isso garante que a resposta 
+tenha um código de status HTTP 200 (OK), indicando que a solicitação foi bem-sucedida.
+
+3. **Verificação do Tipo de Mídia**: Verifica o cabeçalho de tipo de mídia (Content-Type) da resposta usando 
+`expectHeader().contentType(MediaType.APPLICATION_JSON)`. Isso garante que a resposta seja no formato JSON.
+
+4. **Verificação do Corpo da Resposta JSON**: Aqui, usa `expectBody()` para verificar o corpo da resposta JSON usando JSONPath, que é uma 
+linguagem para acessar partes específicas de documentos JSON.
+
+   - `jsonPath("$.id").isEqualTo(1)`: Isso verifica se o campo "id" na resposta JSON é igual a 1, correspondendo ao ID do empregado buscado.
+
+   - `jsonPath("$.nome").isEqualTo("Daniel")`: Isso verifica se o campo "nome" na resposta JSON é igual a "Daniel", correspondendo ao nome do 
+      empregado buscado.
+
+   - `jsonPath("$.sobrenome").isEqualTo("Penelva")`: Isso verifica se o campo "sobrenome" na resposta JSON é igual a "Penelva", correspondendo 
+      ao sobrenome do empregado buscado.
+
+   - `jsonPath("$.email").isEqualTo("d4n.andrade@gmail.com")`: Isso verifica se o campo "email" na resposta JSON é igual a 
+      "d4n.andrade@gmail.com", correspondendo ao email do empregado buscado.
+
+Este teste verifica se a busca de um empregado por meio do endpoint "/api/empregados/{id}" usando o `WebTestClient` funciona conforme o 
+esperado. Ele valida o código de status, o tipo de mídia da resposta e os valores dos campos do empregado obtido na resposta JSON. É um exemplo
+de teste de integração que verifica a funcionalidade de busca de um único recurso em um serviço REST em um aplicativo Spring Boot.

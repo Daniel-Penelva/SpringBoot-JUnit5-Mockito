@@ -50,5 +50,20 @@ public class EmpregadoControllerWebTestClientTests {
             .jsonPath("$.sobrenome").isEqualTo(empregado.getSobrenome())
             .jsonPath("$.email").isEqualTo(empregado.getEmail());
     }
+
+    @Test
+    @Order(2)
+    void testBsucarEmpregadoPorId() {
+    
+      // Envie uma solicitação HTTP GET para obter um empregado pelo ID 1
+      webTestClient.get().uri("http://localhost:8080/api/empregados/1").exchange()
+            .expectStatus().isOk() // Verifique o código de status da resposta
+            .expectHeader().contentType(MediaType.APPLICATION_JSON) // Verifique o cabeçalho de tipo de mídia (Content-Type) da resposta
+            .expectBody() // Verifique o corpo da resposta JSON
+            .jsonPath("$.id").isEqualTo(1)
+            .jsonPath("$.nome").isEqualTo("Daniel")
+            .jsonPath("$.sobrenome").isEqualTo("Penelva")
+            .jsonPath("$.email").isEqualTo("d4n.andrade@gmail.com");
+    }
     
 }
