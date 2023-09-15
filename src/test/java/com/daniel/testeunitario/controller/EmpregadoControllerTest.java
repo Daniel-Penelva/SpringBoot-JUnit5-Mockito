@@ -2,6 +2,7 @@ package com.daniel.testeunitario.controller;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -27,6 +28,7 @@ import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import com.daniel.testeunitario.model.Empregado;
 import com.daniel.testeunitario.service.impl.EmpregadoServiceImpl;
@@ -197,6 +199,24 @@ public class EmpregadoControllerTest {
 
         //then
         response.andExpect(status().isNotFound())
+        .andDo(print());
+    }
+
+
+    @DisplayName("Teste para deletar empregado por id")
+    @Test
+    void testDeletarEmpregadoPorId() throws Exception {
+
+        // given
+        Empregado empregado = criarEmpregado();
+
+       doNothing().when(empregadoServiceMock).deleteEmpregado(empregado.getId());
+
+        // when
+        ResultActions response = mockMvc.perform(delete("/api/empregados/{id}", empregado.getId()));
+
+        //then
+        response.andExpect(status().isOk())
         .andDo(print());
     }
 

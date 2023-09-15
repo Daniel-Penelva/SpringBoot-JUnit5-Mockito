@@ -987,3 +987,59 @@ Em resumo, este teste de unidade verifica se o endpoint "/api/empregados/{id}" e
 empregado não é encontrado com base em um ID. Ele configura um cenário em que o serviço retorna um `Optional` vazio para simular que o empregado 
 não foi encontrado e, em seguida, verifica se a resposta tem o status HTTP esperado (404 Not Found). Isso é útil para garantir que a 
 funcionalidade de atualização de empregado por ID trate adequadamente os casos em que o empregado não existe.
+
+-------------------- // --------------------
+
+Explicando o método de teste -> testDeletarEmpregadoPorId()
+
+Este script é um exemplo de um método de teste de unidade que verifica o comportamento de um endpoint para deletar (remover) um empregado por 
+ID em um aplicativo Spring Boot usando o framework Spring MVC e Mockito para simular o serviço. No entanto, neste teste, o cenário é configurado 
+de forma diferente em comparação com o exemplo anterior. Vou explicar passo a passo o que está acontecendo neste método de teste:
+
+```java
+void testDeletarEmpregadoPorId() throws Exception {
+    // given
+    Empregado empregado = criarEmpregado();
+```
+
+Nesta seção, o teste está configurando o cenário (given) para o teste. Ele cria um objeto `Empregado` chamado `empregado` usando um método 
+`criarEmpregado()` e representa o empregado que será excluído.
+
+```java
+   doNothing().when(empregadoServiceMock).deleteEmpregado(empregado.getId());
+```
+
+Nesta parte, o teste configura um comportamento simulado para o serviço `empregadoServiceMock`.
+
+- `doNothing().when(empregadoServiceMock).deleteEmpregado(empregado.getId());` indica que quando o método `deleteEmpregado()` do serviço for 
+chamado com o ID do `empregado`, ele não deve fazer nada (ou seja, não deve realizar nenhuma ação). Isso simula o comportamento de exclusão de 
+um empregado, mas na prática, ele não exclui nada. 
+
+Este é um exemplo de como você pode configurar um mock para métodos que não retornam valores ou não têm efeitos colaterais observáveis.
+
+```java
+    // when
+    ResultActions response = mockMvc.perform(delete("/api/empregados/{id}", empregado.getId()));
+```
+
+Nesta parte, o teste executa a ação que está sendo testada (when). Ele usa o objeto `mockMvc` para simular uma solicitação DELETE para o 
+endpoint "/api/empregados/{id}", onde `{id}` é substituído pelo ID do `empregado` que está sendo deletado.
+
+```java
+    // then
+    response.andExpect(status().isOk())
+    .andDo(print());
+```
+
+Na seção "then" do teste, ele verifica o resultado da solicitação que foi enviada:
+
+- `response.andExpect(status().isOk())`: Isso verifica se a resposta tem um status HTTP "200 OK", indicando que a solicitação de exclusão foi 
+   bem-sucedida.
+
+- `response.andDo(print())`: Isso adiciona um manipulador de resultados para imprimir informações de resultado no console, o que é útil para 
+   depuração e diagnóstico.
+
+Em resumo, este teste de unidade verifica se o endpoint "/api/empregados/{id}" em seu aplicativo Spring Boot está excluindo um empregado por ID 
+corretamente. Ele configura um cenário em que o serviço não realiza nenhuma ação real de exclusão, mas apenas retorna um código de status HTTP 
+200 OK para indicar que a solicitação foi bem-sucedida. Esse tipo de teste pode ser útil quando você deseja testar apenas a camada de controle 
+do seu aplicativo sem se preocupar com a lógica de negócios real de exclusão no serviço.
